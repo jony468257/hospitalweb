@@ -1,0 +1,41 @@
+
+  Dropping all tables  651.49ms DONE
+
+   INFO  Preparing database.  
+
+  Creating migration table  20.40ms DONE
+
+   INFO  Running migrations.  
+
+  0001_01_01_000000_create_users_table  88.29ms DONE
+  0001_01_01_000001_create_cache_table  56.42ms DONE
+  0001_01_01_000002_create_jobs_table  85.24ms DONE
+  2022_05_17_181447_create_roles_table  27.16ms DONE
+  2022_05_17_181456_create_user_roles_table  136.26ms DONE
+  2025_01_01_000001_create_privileges_table  38.85ms DONE
+  2025_01_01_000002_create_privilege_role_table  149.24ms DONE
+  2025_01_01_000003_add_suspension_columns_to_users_table  80.76ms DONE
+  2026_03_14_054154_create_countries_table  27.98ms DONE
+  2026_03_14_054154_create_divisions_table  69.67ms DONE
+  2026_03_14_054155_create_districts_table  67.04ms DONE
+  2026_03_14_054155_create_thanas_table  95.67ms DONE
+  2026_03_14_054156_create_doctors_table  78.85ms DONE
+  2026_03_14_054157_create_diseases_table  29.58ms DONE
+  2026_03_14_054157_create_medicines_table  15.92ms DONE
+  2026_03_14_054157_create_symptoms_table  18.05ms DONE
+  2026_03_14_054158_create_bookmarks_table  176.21ms DONE
+  2026_03_14_054158_create_disease_medicine_table  137.13ms DONE
+  2026_03_14_054158_create_disease_symptom_table  138.85ms DONE
+  2026_03_14_054159_create_search_histories_table  72.01ms DONE
+  2026_03_14_054190_create_hospitals_table  237.30ms DONE
+  2026_03_14_054191_create_pharmacies_table  244.40ms DONE
+  2026_03_14_054192_create_doctor_hospital_table  148.51ms DONE
+  2026_03_14_054193_create_doctor_schedules_table  131.28ms DONE
+  2026_03_14_054194_create_hospital_reviews_table  122.43ms DONE
+  2026_03_14_054195_create_doctor_reviews_table  160.42ms DONE
+  2026_03_14_060817_create_online_consultations_table  140.66ms DONE
+  2026_03_14_060817_create_pharmacy_medicines_table  149.56ms DONE
+
+
+   INFO  Seeding database.  
+
