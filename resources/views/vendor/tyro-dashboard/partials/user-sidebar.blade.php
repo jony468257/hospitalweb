@@ -27,6 +27,22 @@
                 My Profile
             </a>
         </div>
+        <!-- Patient Menu -->
+        <div class="sidebar-section">
+            <div class="sidebar-section-title">Health Portal</div>
+            <a href="{{ route('patient.consultations.index') }}" class="sidebar-link {{ request()->routeIs('patient.consultations.*') ? 'active' : '' }}">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" />
+                </svg>
+                My Bookings
+            </a>
+            <a href="{{ route('patient.bookmarks.index') }}" class="sidebar-link {{ request()->routeIs('patient.bookmarks.*') ? 'active' : '' }}">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z" />
+                </svg>
+                Saved Items
+            </a>
+        </div>
 
         <div class="sidebar-section">
             <div class="sidebar-section-title">Examples</div>

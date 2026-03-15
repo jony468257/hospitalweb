@@ -17,6 +17,19 @@ class DashboardController extends Controller
     public function index()
     {
         $user = Auth::user();
+        $path = request()->path();
+
+        // Redirection logic for generic dashboard/home routes
+        if ($path === 'dashboard' || $path === 'home') {
+            return match($user->role) {
+                'admin'           => redirect()->route('admin.dashboard'),
+                'hospital_owner'  => redirect()->route('hospital-owner.dashboard'),
+                'doctor'          => redirect()->route('doctor.dashboard'),
+                'pharmacy_owner'  => redirect()->route('pharmacy-owner.dashboard'),
+                'patient'         => redirect()->route('patient.dashboard'),
+                default           => redirect()->route('patient.dashboard'),
+            };
+        }
 
         // Admin Dashboard Stats
         if ($user->role === 'admin') {
@@ -29,7 +42,7 @@ class DashboardController extends Controller
                 'total_medicines'     => Medicine::count(),
                 'pending_consultations' => OnlineConsultation::where('status', 'pending')->count(),
                 'recent_consultations'  => OnlineConsultation::with(['doctor', 'patient'])
-                                            ->latest()->take(5)->get(),
+                                             ->latest()->take(5)->get(),
                 'recent_doctors'      => Doctor::with('hospitals')->latest()->take(5)->get(),
                 'recent_hospitals'    => Hospital::with('thana')->latest()->take(5)->get(),
             ];
@@ -37,12 +50,12 @@ class DashboardController extends Controller
         }
 
         // Doctor Dashboard
-        if ($user->doctors()->exists()) {
+        if ($user->role === 'doctor') {
             $doctor     = $user->doctors()->first();
             $doctorIds  = $user->doctors()->pluck('id');
             $stats = [
-                'my_hospitals'      => $doctor->hospitals()->count(),
-                'total_schedules'   => $doctor->schedules()->count(),
+                'my_hospitals'      => $doctor ? $doctor->hospitals()->count() : 0,
+                'total_schedules'   => $doctor ? $doctor->schedules()->count() : 0,
                 'pending_consults'  => OnlineConsultation::whereIn('doctor_id', $doctorIds)->where('status', 'pending')->count(),
                 'done_consults'     => OnlineConsultation::whereIn('doctor_id', $doctorIds)->where('status', 'completed')->count(),
                 'avg_rating'        => DoctorReview::whereIn('doctor_id', $doctorIds)->avg('rating'),
@@ -52,7 +65,7 @@ class DashboardController extends Controller
         }
 
         // Hospital Owner Dashboard
-        if ($user->hospitals()->exists()) {
+        if ($user->role === 'hospital_owner') {
             $stats = [
                 'my_hospitals'   => $user->hospitals()->count(),
                 'total_doctors'  => $user->hospitals()->withCount('doctors')->get()->sum('doctors_count'),
@@ -62,7 +75,7 @@ class DashboardController extends Controller
         }
 
         // Pharmacy Owner Dashboard
-        if ($user->pharmacies()->exists()) {
+        if ($user->role === 'pharmacy_owner') {
             $stats = [
                 'my_pharmacies'      => $user->pharmacies()->count(),
                 'total_medicines'    => $user->pharmacies()->withCount('medicines')->get()->sum('medicines_count'),
