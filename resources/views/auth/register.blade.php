@@ -1,6 +1,4 @@
-@extends('tyro-dashboard::layouts.guest')
-
-@section('content')
+<x-guest-layout>
 <style>
     :root {
         --fb-bg: linear-gradient(135deg, #f0f2f5 0%, #e7e9ed 100%);
@@ -71,7 +69,7 @@
 
     .role-grid {
         display: grid;
-        grid-template-columns: repeat(3, 1fr);
+        grid-template-columns: repeat(4, 1fr);
         gap: 8px;
         margin-bottom: 16px;
     }
@@ -173,6 +171,7 @@
                 <div class="role-option @if(old('role', 'patient') == 'patient') active @endif" data-role="patient">Patient</div>
                 <div class="role-option @if(old('role') == 'hospital_owner') active @endif" data-role="hospital_owner">Hospital</div>
                 <div class="role-option @if(old('role') == 'pharmacy_owner') active @endif" data-role="pharmacy_owner">Pharmacy</div>
+                <div class="role-option @if(old('role') == 'doctor') active @endif" data-role="doctor">Doctor</div>
             </div>
             <input type="hidden" name="role" id="roleInput" value="{{ old('role', 'patient') }}">
 
@@ -205,4 +204,4 @@
         });
     });
 </script>
-@endsection
+</x-guest-layout>
