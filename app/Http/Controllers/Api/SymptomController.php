@@ -13,7 +13,7 @@ class SymptomController extends Controller
         $query = Symptom::query();
 
         if ($request->filled('search')) {
-            $query->where('name', 'like', '%' . $request->search . '%');
+            $query->where('name', 'like', '%'.$request->search.'%');
         }
 
         return response()->json($query->get());
@@ -22,7 +22,7 @@ class SymptomController extends Controller
     public function store(Request $request)
     {
         $data = $request->validate([
-            'name'        => 'required|string|max:255|unique:symptoms',
+            'name' => 'required|string|max:255|unique:symptoms',
             'description' => 'nullable|string',
         ]);
 
@@ -34,17 +34,19 @@ class SymptomController extends Controller
         $symptom = Symptom::findOrFail($id);
 
         $data = $request->validate([
-            'name'        => 'sometimes|string|max:255|unique:symptoms,name,' . $id,
+            'name' => 'sometimes|string|max:255|unique:symptoms,name,'.$id,
             'description' => 'nullable|string',
         ]);
 
         $symptom->update($data);
+
         return response()->json($symptom);
     }
 
     public function destroy($id)
     {
         Symptom::findOrFail($id)->delete();
+
         return response()->json(['message' => 'Symptom deleted successfully.']);
     }
 }

@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Doctor extends Model
 {
     protected $fillable = [
-        'user_id', 'name', 'slug', 'specialization', 'degree', 'experience_year', 'bio'
+        'user_id', 'name', 'slug', 'specialization', 'degree', 'experience_year', 'bio',
     ];
 
     public function user()
@@ -18,8 +18,8 @@ class Doctor extends Model
     public function hospitals()
     {
         return $this->belongsToMany(Hospital::class, 'doctor_hospital')
-                    ->withPivot('room_no')
-                    ->withTimestamps();
+            ->withPivot('room_no')
+            ->withTimestamps();
     }
 
     public function schedules()

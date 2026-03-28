@@ -14,8 +14,8 @@ class DoctorController extends Controller
         $query = Doctor::with(['hospitals.thana', 'schedules', 'reviews']);
 
         if ($request->filled('search')) {
-            $query->where('name', 'like', '%' . $request->search . '%')
-                  ->orWhere('specialization', 'like', '%' . $request->search . '%');
+            $query->where('name', 'like', '%'.$request->search.'%')
+                ->orWhere('specialization', 'like', '%'.$request->search.'%');
         }
 
         if ($request->filled('specialization')) {
@@ -41,16 +41,17 @@ class DoctorController extends Controller
     public function store(Request $request)
     {
         $data = $request->validate([
-            'user_id'         => 'required|exists:users,id',
-            'name'            => 'required|string|max:255',
-            'slug'            => 'required|string|unique:doctors',
-            'specialization'  => 'required|string|max:255',
-            'degree'          => 'nullable|string|max:255',
+            'user_id' => 'required|exists:users,id',
+            'name' => 'required|string|max:255',
+            'slug' => 'required|string|unique:doctors',
+            'specialization' => 'required|string|max:255',
+            'degree' => 'nullable|string|max:255',
             'experience_year' => 'nullable|integer|min:0',
-            'bio'             => 'nullable|string',
+            'bio' => 'nullable|string',
         ]);
 
         $doctor = Doctor::create($data);
+
         return response()->json($doctor, 201);
     }
 
@@ -64,15 +65,16 @@ class DoctorController extends Controller
         }
 
         $data = $request->validate([
-            'name'            => 'sometimes|string|max:255',
-            'slug'            => 'sometimes|string|unique:doctors,slug,' . $id,
-            'specialization'  => 'sometimes|string|max:255',
-            'degree'          => 'nullable|string|max:255',
+            'name' => 'sometimes|string|max:255',
+            'slug' => 'sometimes|string|unique:doctors,slug,'.$id,
+            'specialization' => 'sometimes|string|max:255',
+            'degree' => 'nullable|string|max:255',
             'experience_year' => 'nullable|integer|min:0',
-            'bio'             => 'nullable|string',
+            'bio' => 'nullable|string',
         ]);
 
         $doctor->update($data);
+
         return response()->json($doctor);
     }
 
@@ -85,6 +87,7 @@ class DoctorController extends Controller
         }
 
         $doctor->delete();
+
         return response()->json(['message' => 'Doctor deleted successfully.']);
     }
 
@@ -97,15 +100,15 @@ class DoctorController extends Controller
         Doctor::findOrFail($id);
 
         $data = $request->validate([
-            'rating'  => 'required|integer|min:1|max:5',
+            'rating' => 'required|integer|min:1|max:5',
             'comment' => 'nullable|string',
         ]);
 
         $review = \App\Models\DoctorReview::create([
             'doctor_id' => $id,
-            'user_id'   => Auth::id(),
-            'rating'    => $data['rating'],
-            'comment'   => $data['comment'] ?? null,
+            'user_id' => Auth::id(),
+            'rating' => $data['rating'],
+            'comment' => $data['comment'] ?? null,
         ]);
 
         return response()->json($review, 201);

@@ -9,6 +9,7 @@ Route::get('/', function () {
 
 Route::get('/hospital/{hospital:slug}', function (\App\Models\Hospital $hospital) {
     $hospital->load(['features', 'services', 'doctors', 'thana']);
+
     return view('hospital', compact('hospital'));
 })->name('public.hospital.show');
 

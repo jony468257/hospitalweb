@@ -18,7 +18,7 @@ trait HasProfileData
             'degree' => 'Master of Computer Science',
             'email' => 'hello@jonyhossen.com',
             'freelance' => 'Available',
-            'avatar' => 'https://ui-avatars.com/api/?name=Jony+Hossen&background=34b7a7&color=fff&size=500'
+            'avatar' => 'https://ui-avatars.com/api/?name=Jony+Hossen&background=34b7a7&color=fff&size=500',
         ];
     }
 }

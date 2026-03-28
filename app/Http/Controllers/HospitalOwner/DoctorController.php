@@ -14,7 +14,7 @@ class DoctorController extends Controller
     public function index()
     {
         $hospitalIds = Auth::user()->hospitals()->pluck('id');
-        $doctors = Doctor::whereHas('hospitals', function($q) use ($hospitalIds) {
+        $doctors = Doctor::whereHas('hospitals', function ($q) use ($hospitalIds) {
             $q->whereIn('hospitals.id', $hospitalIds);
         })->paginate(15);
 
@@ -24,6 +24,7 @@ class DoctorController extends Controller
     public function create()
     {
         $hospitals = Auth::user()->hospitals;
+
         return view('hospital-owner.doctors.create', compact('hospitals'));
     }
 
@@ -61,7 +62,7 @@ class DoctorController extends Controller
             'degree' => $data['degree'],
             'experience_year' => $data['experience_year'],
             'bio' => $data['bio'],
-            'slug' => Str::slug($data['name']) . '-' . rand(1000, 9999),
+            'slug' => Str::slug($data['name']).'-'.rand(1000, 9999),
         ]);
 
         $doctor->hospitals()->attach($hospital->id);
@@ -73,11 +74,12 @@ class DoctorController extends Controller
     {
         // Ownership check
         $hospitalIds = Auth::user()->hospitals()->pluck('id')->toArray();
-        if (!$doctor->hospitals()->whereIn('hospitals.id', $hospitalIds)->exists()) {
+        if (! $doctor->hospitals()->whereIn('hospitals.id', $hospitalIds)->exists()) {
             abort(403);
         }
 
         $hospitals = Auth::user()->hospitals;
+
         return view('hospital-owner.doctors.edit', compact('doctor', 'hospitals'));
     }
 
@@ -85,7 +87,7 @@ class DoctorController extends Controller
     {
         // Ownership check
         $hospitalIds = Auth::user()->hospitals()->pluck('id')->toArray();
-        if (!$doctor->hospitals()->whereIn('hospitals.id', $hospitalIds)->exists()) {
+        if (! $doctor->hospitals()->whereIn('hospitals.id', $hospitalIds)->exists()) {
             abort(403);
         }
 
@@ -106,14 +108,14 @@ class DoctorController extends Controller
     {
         // Ownership check
         $hospitalIds = Auth::user()->hospitals()->pluck('id')->toArray();
-        if (!$doctor->hospitals()->whereIn('hospitals.id', $hospitalIds)->exists()) {
+        if (! $doctor->hospitals()->whereIn('hospitals.id', $hospitalIds)->exists()) {
             abort(403);
         }
 
         // Optional: Detach from all of owner's hospitals
         // Or completely delete the doctor and user
         $doctor->hospitals()->detach($hospitalIds);
-        
+
         // If the doctor belongs to no other hospitals, you might choose to delete their User profile too.
         if ($doctor->hospitals()->count() === 0) {
             $userId = $doctor->user_id;

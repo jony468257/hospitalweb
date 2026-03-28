@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class OnlineConsultation extends Model
 {
     protected $fillable = [
-        'doctor_id', 'patient_id', 'consult_date', 'status', 'fee', 'meeting_link'
+        'doctor_id', 'patient_id', 'consult_date', 'status', 'fee', 'meeting_link',
     ];
 
     public function doctor()

@@ -44,35 +44,35 @@ return [
                     'label' => 'Name',
                     'required' => true,
                     'searchable' => true,
-                    'placeholder' => 'Enter full name'
+                    'placeholder' => 'Enter full name',
                 ],
                 'email' => [
                     'type' => 'text',
                     'label' => 'Email',
                     'required' => true,
                     'searchable' => true,
-                    'placeholder' => 'user@example.com'
+                    'placeholder' => 'user@example.com',
                 ],
                 'status' => [
                     'type' => 'select',
                     'options' => ['active', 'inactive'],
                     'label' => 'Account Status',
-                    'required' => true
+                    'required' => true,
                 ],
                 'is_admin' => [
                     'type' => 'toggle',
-                    'label' => 'Administrator Access'
+                    'label' => 'Administrator Access',
                 ],
                 'bio' => [
                     'type' => 'richtext',
-                    'label' => 'Biography'
+                    'label' => 'Biography',
                 ],
                 'password' => [
                     'type' => 'password',
                     'label' => 'Password',
-                    'required' => true
-                ]
-            ]
+                    'required' => true,
+                ],
+            ],
         ],
 
         // Portfolio Profile (Home/About)
@@ -111,7 +111,7 @@ return [
                 'email' => ['type' => 'text', 'label' => 'Email'],
                 'freelance' => ['type' => 'text', 'label' => 'Freelance Status (English)', 'hide_in_index' => true],
                 'freelance_bn' => ['type' => 'text', 'label' => 'Freelance Status (Bangla)', 'hide_in_index' => true],
-            ]
+            ],
         ],
 
         // Skills
@@ -123,7 +123,7 @@ return [
                 'name' => ['type' => 'text', 'label' => 'Skill Name (English)', 'required' => true],
                 'name_bn' => ['type' => 'text', 'label' => 'Skill Name (Bangla)', 'required' => false, 'hide_in_index' => true],
                 'val' => ['type' => 'number', 'label' => 'Percentage (0-100)', 'required' => true, 'min' => 0, 'max' => 100],
-            ]
+            ],
         ],
 
         // Facts
@@ -135,7 +135,7 @@ return [
                 'label' => ['type' => 'text', 'label' => 'Fact Label (English)', 'required' => true],
                 'label_bn' => ['type' => 'text', 'label' => 'Fact Label (Bangla)', 'required' => false, 'hide_in_index' => true],
                 'count' => ['type' => 'number', 'label' => 'Count', 'required' => true],
-            ]
+            ],
         ],
 
         // Education
@@ -151,7 +151,7 @@ return [
                 'year' => ['type' => 'text', 'label' => 'Year (e.g. 2015-2016)', 'required' => true],
                 'desc' => ['type' => 'richtext', 'label' => 'Description (English)', 'hide_in_index' => true],
                 'desc_bn' => ['type' => 'richtext', 'label' => 'Description (Bangla)', 'hide_in_index' => true],
-            ]
+            ],
         ],
 
         // Experiences
@@ -167,7 +167,7 @@ return [
                 'year' => ['type' => 'text', 'label' => 'Year (e.g. 2019-Present)', 'required' => true],
                 'bullets' => ['type' => 'richtext', 'label' => 'Description (Bullets - English)', 'hide_in_index' => true],
                 'bullets_bn' => ['type' => 'richtext', 'label' => 'Description (Bullets - Bangla)', 'hide_in_index' => true],
-            ]
+            ],
         ],
 
         // Services
@@ -181,7 +181,7 @@ return [
                 'description' => ['type' => 'richtext', 'label' => 'Description (English)', 'required' => true, 'hide_in_index' => true],
                 'description_bn' => ['type' => 'richtext', 'label' => 'Description (Bangla)', 'required' => false, 'hide_in_index' => true],
                 'icon' => ['type' => 'text', 'label' => 'Bootstrap Icon Class (e.g. bi bi-code)', 'required' => true],
-            ]
+            ],
         ],
 
         // Projects
@@ -200,7 +200,7 @@ return [
                 'image_4' => ['type' => 'file', 'label' => 'Project Image 4', 'required' => false, 'hide_in_index' => true],
                 'image_5' => ['type' => 'file', 'label' => 'Project Image 5', 'required' => false, 'hide_in_index' => true],
                 'link' => ['type' => 'text', 'label' => 'Web Site Link', 'required' => false],
-            ]
+            ],
         ],
 
         // Certifications
@@ -214,7 +214,7 @@ return [
                 'year' => ['type' => 'text', 'label' => 'Year', 'required' => true],
                 'desc' => ['type' => 'textarea', 'label' => 'Description (English)', 'hide_in_index' => true],
                 'desc_bn' => ['type' => 'textarea', 'label' => 'Description (Bangla)', 'hide_in_index' => true],
-            ]
+            ],
         ],
 
         // Contact Messages
@@ -228,10 +228,10 @@ return [
                 'email' => ['type' => 'text', 'label' => 'Email'],
                 'subject' => ['type' => 'text', 'label' => 'Subject'],
                 'message' => ['type' => 'textarea', 'label' => 'Message'],
-            ]
+            ],
         ],
 
-/*
+        /*
         // Example Posts Resource
         'posts' => [
             'model' => App\Models\Post::class,
@@ -315,17 +315,17 @@ return [
     'menus' => [
         [
             'label' => 'Users',
-            'icon'  => 'users',
+            'icon' => 'users',
             'route' => 'users.index',
         ],
         [
             'label' => 'Profile (Home)',
-            'icon'  => 'user',
+            'icon' => 'user',
             'route' => 'portfolio_profiles.index',
         ],
         [
             'label' => 'About',
-            'icon'  => 'info',
+            'icon' => 'info',
             'submenu' => [
                 [
                     'label' => 'Skills',
@@ -335,11 +335,11 @@ return [
                     'label' => 'Facts',
                     'route' => 'facts.index',
                 ],
-            ]
+            ],
         ],
         [
             'label' => 'Resume',
-            'icon'  => 'file-text',
+            'icon' => 'file-text',
             'submenu' => [
                 [
                     'label' => 'Education',
@@ -353,21 +353,21 @@ return [
                     'label' => 'Certifications',
                     'route' => 'certifications.index',
                 ],
-            ]
+            ],
         ],
         [
             'label' => 'Services',
-            'icon'  => 'briefcase',
+            'icon' => 'briefcase',
             'route' => 'services.index',
         ],
         [
             'label' => 'Portfolio',
-            'icon'  => 'image',
+            'icon' => 'image',
             'route' => 'projects.index',
         ],
         [
             'label' => 'Contact',
-            'icon'  => 'mail',
+            'icon' => 'mail',
             'route' => 'contact_messages.index',
         ],
     ],

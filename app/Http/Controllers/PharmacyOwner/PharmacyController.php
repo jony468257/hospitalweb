@@ -3,9 +3,9 @@
 namespace App\Http\Controllers\PharmacyOwner;
 
 use App\Http\Controllers\Controller;
+use App\Models\Country;
 use App\Models\Pharmacy;
 use App\Models\Thana;
-use App\Models\Country;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
@@ -15,6 +15,7 @@ class PharmacyController extends Controller
     public function index()
     {
         $pharmacies = Auth::user()->pharmacies()->with('thana')->paginate(10);
+
         return view('pharmacy-owner.pharmacies.index', compact('pharmacies'));
     }
 
@@ -22,6 +23,7 @@ class PharmacyController extends Controller
     {
         $thanas = Thana::all();
         $countries = Country::all();
+
         return view('pharmacy-owner.pharmacies.create', compact('thanas', 'countries'));
     }
 
@@ -39,7 +41,7 @@ class PharmacyController extends Controller
         ]);
 
         $data['user_id'] = Auth::id();
-        $data['slug'] = Str::slug($data['name']) . '-' . rand(1000, 9999);
+        $data['slug'] = Str::slug($data['name']).'-'.rand(1000, 9999);
 
         Pharmacy::create($data);
 
@@ -54,6 +56,7 @@ class PharmacyController extends Controller
 
         $thanas = Thana::all();
         $countries = Country::all();
+
         return view('pharmacy-owner.pharmacies.edit', compact('pharmacy', 'thanas', 'countries'));
     }
 

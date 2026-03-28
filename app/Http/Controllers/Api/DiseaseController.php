@@ -13,7 +13,7 @@ class DiseaseController extends Controller
         $query = Disease::with(['symptoms', 'medicines']);
 
         if ($request->filled('search')) {
-            $query->where('name', 'like', '%' . $request->search . '%');
+            $query->where('name', 'like', '%'.$request->search.'%');
         }
 
         return response()->json($query->paginate(15));
@@ -31,10 +31,10 @@ class DiseaseController extends Controller
     public function store(Request $request)
     {
         $data = $request->validate([
-            'name'        => 'required|string|max:255|unique:diseases',
-            'slug'        => 'required|string|unique:diseases',
+            'name' => 'required|string|max:255|unique:diseases',
+            'slug' => 'required|string|unique:diseases',
             'description' => 'nullable|string',
-            'overview'    => 'nullable|string',
+            'overview' => 'nullable|string',
         ]);
 
         $disease = Disease::create($data);
@@ -55,10 +55,10 @@ class DiseaseController extends Controller
         $disease = Disease::findOrFail($id);
 
         $data = $request->validate([
-            'name'        => 'sometimes|string|max:255|unique:diseases,name,' . $id,
-            'slug'        => 'sometimes|string|unique:diseases,slug,' . $id,
+            'name' => 'sometimes|string|max:255|unique:diseases,name,'.$id,
+            'slug' => 'sometimes|string|unique:diseases,slug,'.$id,
             'description' => 'nullable|string',
-            'overview'    => 'nullable|string',
+            'overview' => 'nullable|string',
         ]);
 
         $disease->update($data);
@@ -77,6 +77,7 @@ class DiseaseController extends Controller
     public function destroy($id)
     {
         Disease::findOrFail($id)->delete();
+
         return response()->json(['message' => 'Disease deleted successfully.']);
     }
 
@@ -87,7 +88,7 @@ class DiseaseController extends Controller
     public function bySymptoms(Request $request)
     {
         $request->validate([
-            'symptom_ids'   => 'required|array',
+            'symptom_ids' => 'required|array',
             'symptom_ids.*' => 'integer|exists:symptoms,id',
         ]);
 

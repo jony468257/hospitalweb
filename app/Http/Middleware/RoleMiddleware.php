@@ -29,7 +29,7 @@ class RoleMiddleware
         }
 
         return response()->json([
-            'message' => 'Forbidden. Required role(s): ' . implode(', ', $roles),
+            'message' => 'Forbidden. Required role(s): '.implode(', ', $roles),
         ], 403);
     }
 }

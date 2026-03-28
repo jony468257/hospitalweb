@@ -59,6 +59,7 @@ class ConsultationController extends Controller
         }
 
         $consultation->load(['doctor', 'hospital']);
+
         return view('patient.consultations.show', compact('consultation'));
     }
 

@@ -14,7 +14,7 @@ class HospitalController extends Controller
         $query = Hospital::with(['thana.district.division.country', 'doctors']);
 
         if ($request->filled('search')) {
-            $query->where('name', 'like', '%' . $request->search . '%');
+            $query->where('name', 'like', '%'.$request->search.'%');
         }
 
         if ($request->filled('thana_id')) {
@@ -40,13 +40,13 @@ class HospitalController extends Controller
     public function store(Request $request)
     {
         $data = $request->validate([
-            'user_id'   => 'required|exists:users,id',
-            'name'      => 'required|string|max:255',
-            'slug'      => 'required|string|unique:hospitals',
-            'thana_id'  => 'required|exists:thanas,id',
-            'address'   => 'nullable|string',
-            'phone'     => 'nullable|string|max:20',
-            'latitude'  => 'nullable|numeric',
+            'user_id' => 'required|exists:users,id',
+            'name' => 'required|string|max:255',
+            'slug' => 'required|string|unique:hospitals',
+            'thana_id' => 'required|exists:thanas,id',
+            'address' => 'nullable|string',
+            'phone' => 'nullable|string|max:20',
+            'latitude' => 'nullable|numeric',
             'longitude' => 'nullable|numeric',
         ]);
 
@@ -62,16 +62,17 @@ class HospitalController extends Controller
         }
 
         $data = $request->validate([
-            'name'      => 'sometimes|string|max:255',
-            'slug'      => 'sometimes|string|unique:hospitals,slug,' . $id,
-            'thana_id'  => 'sometimes|exists:thanas,id',
-            'address'   => 'nullable|string',
-            'phone'     => 'nullable|string|max:20',
-            'latitude'  => 'nullable|numeric',
+            'name' => 'sometimes|string|max:255',
+            'slug' => 'sometimes|string|unique:hospitals,slug,'.$id,
+            'thana_id' => 'sometimes|exists:thanas,id',
+            'address' => 'nullable|string',
+            'phone' => 'nullable|string|max:20',
+            'latitude' => 'nullable|numeric',
             'longitude' => 'nullable|numeric',
         ]);
 
         $hospital->update($data);
+
         return response()->json($hospital);
     }
 
@@ -84,6 +85,7 @@ class HospitalController extends Controller
         }
 
         $hospital->delete();
+
         return response()->json(['message' => 'Hospital deleted successfully.']);
     }
 
@@ -94,19 +96,19 @@ class HospitalController extends Controller
     public function nearby(Request $request)
     {
         $request->validate([
-            'lat'    => 'required|numeric',
-            'lng'    => 'required|numeric',
+            'lat' => 'required|numeric',
+            'lng' => 'required|numeric',
             'radius' => 'nullable|numeric|min:1|max:100',
         ]);
 
-        $lat    = $request->lat;
-        $lng    = $request->lng;
+        $lat = $request->lat;
+        $lng = $request->lng;
         $radius = $request->radius ?? 10; // km
 
         $hospitals = Hospital::with(['thana'])
-            ->selectRaw("*, ( 6371 * acos( cos( radians(?) ) * cos( radians(latitude) )
+            ->selectRaw('*, ( 6371 * acos( cos( radians(?) ) * cos( radians(latitude) )
                 * cos( radians(longitude) - radians(?) ) + sin( radians(?) )
-                * sin( radians(latitude) ) ) ) AS distance", [$lat, $lng, $lat])
+                * sin( radians(latitude) ) ) ) AS distance', [$lat, $lng, $lat])
             ->whereNotNull('latitude')
             ->having('distance', '<', $radius)
             ->orderBy('distance')
@@ -120,15 +122,15 @@ class HospitalController extends Controller
         Hospital::findOrFail($id);
 
         $data = $request->validate([
-            'rating'  => 'required|integer|min:1|max:5',
+            'rating' => 'required|integer|min:1|max:5',
             'comment' => 'nullable|string',
         ]);
 
         $review = \App\Models\HospitalReview::create([
             'hospital_id' => $id,
-            'user_id'     => Auth::id(),
-            'rating'      => $data['rating'],
-            'comment'     => $data['comment'] ?? null,
+            'user_id' => Auth::id(),
+            'rating' => $data['rating'],
+            'comment' => $data['comment'] ?? null,
         ]);
 
         return response()->json($review, 201);

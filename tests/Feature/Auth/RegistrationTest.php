@@ -27,7 +27,7 @@ class RegistrationTest extends TestCase
 
         $this->assertDatabaseHas('users', ['email' => 'test@example.com']);
         // Auto-login is disabled by default in tyro-login config
-        // $this->assertAuthenticated(); 
+        // $this->assertAuthenticated();
         $response->assertRedirect('/');
     }
 }

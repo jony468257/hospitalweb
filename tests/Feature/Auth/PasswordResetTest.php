@@ -6,7 +6,6 @@ use App\Models\User;
 use HasinHayder\TyroLogin\Mail\PasswordResetMail;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Mail;
-use Illuminate\Support\Facades\Notification;
 use Tests\TestCase;
 
 class PasswordResetTest extends TestCase
@@ -42,8 +41,8 @@ class PasswordResetTest extends TestCase
         $this->post('/forgot-password', ['email' => $user->email]);
 
         Mail::assertSent(PasswordResetMail::class, function ($mail) use ($user) {
-             $response = $this->get($mail->resetUrl);
-             $response->assertStatus(200);
+            $response = $this->get($mail->resetUrl);
+            $response->assertStatus(200);
 
             return $mail->hasTo($user->email);
         });
@@ -58,10 +57,10 @@ class PasswordResetTest extends TestCase
         $this->post('/forgot-password', ['email' => $user->email]);
 
         Mail::assertSent(PasswordResetMail::class, function ($mail) use ($user) {
-             // Extract token from resetUrl
-             $path = parse_url($mail->resetUrl, PHP_URL_PATH);
-             $segments = explode('/', trim($path, '/'));
-             $token = last($segments);
+            // Extract token from resetUrl
+            $path = parse_url($mail->resetUrl, PHP_URL_PATH);
+            $segments = explode('/', trim($path, '/'));
+            $token = last($segments);
 
             // 2. Reset password using the token
             $response = $this->post('/reset-password', [
@@ -72,7 +71,7 @@ class PasswordResetTest extends TestCase
             ]);
 
             $response
-                //->assertSessionHasNoErrors() // Tyro login might validation differently, let's check redirect
+                // ->assertSessionHasNoErrors() // Tyro login might validation differently, let's check redirect
                 ->assertRedirect(config('tyro-login.redirects.after_login', '/'));
 
             return true;

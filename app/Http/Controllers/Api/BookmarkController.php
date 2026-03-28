@@ -22,7 +22,7 @@ class BookmarkController extends Controller
     {
         $data = $request->validate([
             'disease_id' => 'nullable|exists:diseases,id',
-            'doctor_id'  => 'nullable|exists:doctors,id',
+            'doctor_id' => 'nullable|exists:doctors,id',
         ]);
 
         if (empty($data['disease_id']) && empty($data['doctor_id'])) {
@@ -30,9 +30,9 @@ class BookmarkController extends Controller
         }
 
         $bookmark = Bookmark::firstOrCreate([
-            'user_id'    => Auth::id(),
+            'user_id' => Auth::id(),
             'disease_id' => $data['disease_id'] ?? null,
-            'doctor_id'  => $data['doctor_id'] ?? null,
+            'doctor_id' => $data['doctor_id'] ?? null,
         ]);
 
         return response()->json($bookmark, 201);
@@ -42,6 +42,7 @@ class BookmarkController extends Controller
     {
         $bookmark = Bookmark::where('user_id', Auth::id())->findOrFail($id);
         $bookmark->delete();
+
         return response()->json(['message' => 'Bookmark removed.']);
     }
 }

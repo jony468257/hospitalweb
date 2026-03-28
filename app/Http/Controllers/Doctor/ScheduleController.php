@@ -3,9 +3,7 @@
 namespace App\Http\Controllers\Doctor;
 
 use App\Http\Controllers\Controller;
-use App\Models\Doctor;
 use App\Models\DoctorSchedule;
-use App\Models\Hospital;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -16,11 +14,12 @@ class ScheduleController extends Controller
         /** @var \App\Models\User $user */
         $user = Auth::user();
         $doctor = $user->doctors()->first();
-        if (!$doctor) {
+        if (! $doctor) {
             return redirect()->back()->with('error', 'You are not registered as a doctor.');
         }
 
         $schedules = $doctor->schedules()->with('hospital')->paginate(10);
+
         return view('doctor.schedules.index', compact('schedules'));
     }
 
@@ -29,11 +28,12 @@ class ScheduleController extends Controller
         /** @var \App\Models\User $user */
         $user = Auth::user();
         $doctor = $user->doctors()->first();
-        if (!$doctor) {
+        if (! $doctor) {
             abort(403, 'Doctor profile not found.');
         }
 
         $hospitals = $doctor->hospitals;
+
         return view('doctor.schedules.create', compact('hospitals'));
     }
 
@@ -42,7 +42,7 @@ class ScheduleController extends Controller
         /** @var \App\Models\User $user */
         $user = Auth::user();
         $doctor = $user->doctors()->first();
-        if (!$doctor) {
+        if (! $doctor) {
             abort(403);
         }
 
@@ -66,11 +66,12 @@ class ScheduleController extends Controller
         /** @var \App\Models\User $user */
         $user = Auth::user();
         $doctor = $user->doctors()->first();
-        if (!$doctor || $schedule->doctor_id !== $doctor->id) {
+        if (! $doctor || $schedule->doctor_id !== $doctor->id) {
             abort(403);
         }
 
         $hospitals = $doctor->hospitals;
+
         return view('doctor.schedules.edit', compact('schedule', 'hospitals'));
     }
 
@@ -79,7 +80,7 @@ class ScheduleController extends Controller
         /** @var \App\Models\User $user */
         $user = Auth::user();
         $doctor = $user->doctors()->first();
-        if (!$doctor || $schedule->doctor_id !== $doctor->id) {
+        if (! $doctor || $schedule->doctor_id !== $doctor->id) {
             abort(403);
         }
 
@@ -101,7 +102,7 @@ class ScheduleController extends Controller
         /** @var \App\Models\User $user */
         $user = Auth::user();
         $doctor = $user->doctors()->first();
-        if (!$doctor || $schedule->doctor_id !== $doctor->id) {
+        if (! $doctor || $schedule->doctor_id !== $doctor->id) {
             abort(403);
         }
 

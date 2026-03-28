@@ -25,6 +25,7 @@ class MedicineController extends Controller
     {
         $pharmacies = Auth::user()->pharmacies;
         $allMedicines = Medicine::all();
+
         return view('pharmacy-owner.medicines.create', compact('pharmacies', 'allMedicines'));
     }
 
@@ -58,6 +59,7 @@ class MedicineController extends Controller
 
         $pharmacies = Auth::user()->pharmacies;
         $allMedicines = Medicine::all();
+
         return view('pharmacy-owner.medicines.edit', compact('medicine', 'pharmacies', 'allMedicines'));
     }
 

@@ -4,8 +4,8 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\Country;
-use App\Models\Division;
 use App\Models\District;
+use App\Models\Division;
 use App\Models\Thana;
 
 class LocationController extends Controller

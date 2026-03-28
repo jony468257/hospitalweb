@@ -7,8 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 class Hospital extends Model
 {
     protected $fillable = [
-        'user_id', 'name', 'slug', 'type', 'address', 'phone', 
-        'thana_id', 'country_id', 'latitude', 'longitude', 'description'
+        'user_id', 'name', 'slug', 'type', 'address', 'phone',
+        'thana_id', 'country_id', 'latitude', 'longitude', 'description',
     ];
 
     public function owner()
@@ -29,8 +29,8 @@ class Hospital extends Model
     public function doctors()
     {
         return $this->belongsToMany(Doctor::class, 'doctor_hospital')
-                    ->withPivot('room_no')
-                    ->withTimestamps();
+            ->withPivot('room_no')
+            ->withTimestamps();
     }
 
     public function schedules()

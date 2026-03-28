@@ -14,7 +14,7 @@ class PharmacyController extends Controller
         $query = Pharmacy::with(['thana.district.division']);
 
         if ($request->filled('search')) {
-            $query->where('name', 'like', '%' . $request->search . '%');
+            $query->where('name', 'like', '%'.$request->search.'%');
         }
 
         if ($request->filled('thana_id')) {
@@ -36,13 +36,13 @@ class PharmacyController extends Controller
     public function store(Request $request)
     {
         $data = $request->validate([
-            'user_id'   => 'required|exists:users,id',
-            'name'      => 'required|string|max:255',
-            'slug'      => 'required|string|unique:pharmacies',
-            'thana_id'  => 'required|exists:thanas,id',
-            'address'   => 'nullable|string',
-            'phone'     => 'nullable|string|max:20',
-            'latitude'  => 'nullable|numeric',
+            'user_id' => 'required|exists:users,id',
+            'name' => 'required|string|max:255',
+            'slug' => 'required|string|unique:pharmacies',
+            'thana_id' => 'required|exists:thanas,id',
+            'address' => 'nullable|string',
+            'phone' => 'nullable|string|max:20',
+            'latitude' => 'nullable|numeric',
             'longitude' => 'nullable|numeric',
         ]);
 
@@ -58,16 +58,17 @@ class PharmacyController extends Controller
         }
 
         $data = $request->validate([
-            'name'      => 'sometimes|string|max:255',
-            'slug'      => 'sometimes|string|unique:pharmacies,slug,' . $id,
-            'thana_id'  => 'sometimes|exists:thanas,id',
-            'address'   => 'nullable|string',
-            'phone'     => 'nullable|string|max:20',
-            'latitude'  => 'nullable|numeric',
+            'name' => 'sometimes|string|max:255',
+            'slug' => 'sometimes|string|unique:pharmacies,slug,'.$id,
+            'thana_id' => 'sometimes|exists:thanas,id',
+            'address' => 'nullable|string',
+            'phone' => 'nullable|string|max:20',
+            'latitude' => 'nullable|numeric',
             'longitude' => 'nullable|numeric',
         ]);
 
         $pharmacy->update($data);
+
         return response()->json($pharmacy);
     }
 
@@ -80,6 +81,7 @@ class PharmacyController extends Controller
         }
 
         $pharmacy->delete();
+
         return response()->json(['message' => 'Pharmacy deleted successfully.']);
     }
 
@@ -90,19 +92,19 @@ class PharmacyController extends Controller
     public function nearby(Request $request)
     {
         $request->validate([
-            'lat'    => 'required|numeric',
-            'lng'    => 'required|numeric',
+            'lat' => 'required|numeric',
+            'lng' => 'required|numeric',
             'radius' => 'nullable|numeric|min:1|max:100',
         ]);
 
-        $lat    = $request->lat;
-        $lng    = $request->lng;
+        $lat = $request->lat;
+        $lng = $request->lng;
         $radius = $request->radius ?? 5;
 
         $pharmacies = Pharmacy::with(['thana'])
-            ->selectRaw("*, ( 6371 * acos( cos( radians(?) ) * cos( radians(latitude) )
+            ->selectRaw('*, ( 6371 * acos( cos( radians(?) ) * cos( radians(latitude) )
                 * cos( radians(longitude) - radians(?) ) + sin( radians(?) )
-                * sin( radians(latitude) ) ) ) AS distance", [$lat, $lng, $lat])
+                * sin( radians(latitude) ) ) ) AS distance', [$lat, $lng, $lat])
             ->whereNotNull('latitude')
             ->having('distance', '<', $radius)
             ->orderBy('distance')
@@ -124,19 +126,19 @@ class PharmacyController extends Controller
         }
 
         $request->validate([
-            'medicines'            => 'required|array',
-            'medicines.*.id'       => 'required|exists:medicines,id',
-            'medicines.*.stock'    => 'required|integer|min:0',
-            'medicines.*.price'    => 'required|numeric|min:0',
+            'medicines' => 'required|array',
+            'medicines.*.id' => 'required|exists:medicines,id',
+            'medicines.*.stock' => 'required|integer|min:0',
+            'medicines.*.price' => 'required|numeric|min:0',
             'medicines.*.discount' => 'nullable|numeric|min:0|max:100',
         ]);
 
         $syncData = collect($request->medicines)->mapWithKeys(fn ($m) => [
             $m['id'] => [
-                'stock'    => $m['stock'],
-                'price'    => $m['price'],
+                'stock' => $m['stock'],
+                'price' => $m['price'],
                 'discount' => $m['discount'] ?? 0,
-            ]
+            ],
         ])->toArray();
 
         $pharmacy->medicines()->sync($syncData);

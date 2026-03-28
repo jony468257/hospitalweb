@@ -55,17 +55,17 @@ class OnlineConsultationController extends Controller
     public function store(Request $request)
     {
         $data = $request->validate([
-            'doctor_id'        => 'required|exists:doctors,id',
-            'scheduled_at'     => 'required|date|after:now',
-            'notes'            => 'nullable|string',
+            'doctor_id' => 'required|exists:doctors,id',
+            'scheduled_at' => 'required|date|after:now',
+            'notes' => 'nullable|string',
         ]);
 
         $consultation = OnlineConsultation::create([
-            'doctor_id'    => $data['doctor_id'],
-            'patient_id'   => Auth::id(),
+            'doctor_id' => $data['doctor_id'],
+            'patient_id' => Auth::id(),
             'scheduled_at' => $data['scheduled_at'],
-            'notes'        => $data['notes'] ?? null,
-            'status'       => 'pending',
+            'notes' => $data['notes'] ?? null,
+            'status' => 'pending',
         ]);
 
         return response()->json($consultation->load(['doctor', 'patient']), 201);
@@ -82,7 +82,7 @@ class OnlineConsultationController extends Controller
             'status' => 'required|in:pending,approved,rejected,completed',
         ]);
 
-        $user      = Auth::user();
+        $user = Auth::user();
         $doctorIds = $user->doctors()->pluck('id')->toArray();
 
         if ($user->role !== 'admin' && ! in_array($consultation->doctor_id, $doctorIds)) {
@@ -90,6 +90,7 @@ class OnlineConsultationController extends Controller
         }
 
         $consultation->update(['status' => $data['status']]);
+
         return response()->json($consultation);
     }
 
@@ -102,6 +103,7 @@ class OnlineConsultationController extends Controller
         }
 
         $consultation->delete();
+
         return response()->json(['message' => 'Consultation cancelled.']);
     }
 }

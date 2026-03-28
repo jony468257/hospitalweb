@@ -27,11 +27,12 @@ class ConsultationController extends Controller
     {
         /** @var \App\Models\User $user */
         $user = Auth::user();
-        if (!$user->doctors()->where('id', $consultation->doctor_id)->exists()) {
+        if (! $user->doctors()->where('id', $consultation->doctor_id)->exists()) {
             abort(403);
         }
 
         $consultation->load(['patient', 'hospital']);
+
         return view('doctor.consultations.show', compact('consultation'));
     }
 
@@ -39,7 +40,7 @@ class ConsultationController extends Controller
     {
         /** @var \App\Models\User $user */
         $user = Auth::user();
-        if (!$user->doctors()->where('id', $consultation->doctor_id)->exists()) {
+        if (! $user->doctors()->where('id', $consultation->doctor_id)->exists()) {
             abort(403);
         }
 

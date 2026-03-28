@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class PharmacyMedicine extends Model
 {
     protected $fillable = [
-        'pharmacy_id', 'medicine_id', 'price', 'stock', 'discount'
+        'pharmacy_id', 'medicine_id', 'price', 'stock', 'discount',
     ];
 
     public function pharmacy()

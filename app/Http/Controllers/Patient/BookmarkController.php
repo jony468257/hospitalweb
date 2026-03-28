@@ -12,6 +12,7 @@ class BookmarkController extends Controller
     public function index()
     {
         $bookmarks = Auth::user()->bookmarks()->with('bookmarkable')->paginate(20);
+
         return view('patient.bookmarks.index', compact('bookmarks'));
     }
 
