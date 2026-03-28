@@ -50,6 +50,12 @@
                     <input type="email" id="email" name="email" class="form-input @error('email') is-invalid @enderror" value="{{ old('email') }}" required>
                     @error('email') <span class="form-error">{{ $message }}</span> @enderror
                 </div>
+
+                <div class="form-group">
+                    <label for="password" class="form-label">Password</label>
+                    <input type="password" id="password" name="password" class="form-input @error('password') is-invalid @enderror" required>
+                    @error('password') <span class="form-error">{{ $message }}</span> @enderror
+                </div>
             </div>
 
             <div class="grid-2">

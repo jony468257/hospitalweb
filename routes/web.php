@@ -7,6 +7,11 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+Route::get('/hospital/{hospital:slug}', function (\App\Models\Hospital $hospital) {
+    $hospital->load(['features', 'services', 'doctors', 'thana']);
+    return view('hospital', compact('hospital'));
+})->name('public.hospital.show');
+
 // Alias to catch the Tyro-Login forced redirect and send it to standard login
 Route::get('/tyro-login', fn () => redirect()->route('login'))->name('tyro-login.login');
 

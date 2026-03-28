@@ -42,4 +42,14 @@ class Hospital extends Model
     {
         return $this->hasMany(HospitalReview::class);
     }
+
+    public function features()
+    {
+        return $this->hasMany(HospitalFeature::class);
+    }
+
+    public function services()
+    {
+        return $this->hasMany(HospitalService::class);
+    }
 }

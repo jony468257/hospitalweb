@@ -51,8 +51,13 @@
                                 <span class="badge badge-info">{{ $h->name }}</span>
                             @endforeach
                         </td>
-                        <td style="text-align:right;">
-                            <a href="{{ route('hospital-owner.doctors.edit', $doctor) }}" class="btn btn-sm btn-outline-primary">Edit</a>
+                        <td style="text-align:right; display:flex; justify-content:flex-end; gap:0.5rem; align-items:center;">
+                            <a href="{{ route('hospital-owner.doctors.edit', $doctor) }}" class="btn btn-sm btn-primary">Edit</a>
+                            <form action="{{ route('hospital-owner.doctors.destroy', $doctor) }}" method="POST" onsubmit="return confirm('Are you sure you want to remove this doctor from your hospitals?');" style="margin:0;">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+                            </form>
                         </td>
                     </tr>
                     @empty

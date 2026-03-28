@@ -82,8 +82,86 @@
                 <textarea id="description" name="description" class="form-input @error('description') is-invalid @enderror" rows="4">{{ old('description', $hospital->description) }}</textarea>
                 @error('description') <span class="form-error">{{ $message }}</span> @enderror
             </div>
+
+            <hr style="margin: 2rem 0; border: none; border-top: 1px solid var(--border);">
+            <h4 style="margin-bottom: 1rem; font-size: 1.0625rem; font-weight: 600;">Additional Details</h4>
+
+            <div class="form-group">
+                <label for="doctors" class="form-label">Associated Doctors</label>
+                <select id="doctors" name="doctors[]" class="form-input" multiple style="height: 120px;">
+                    @foreach($doctors as $doctor)
+                        <option value="{{ $doctor->id }}" {{ in_array($doctor->id, old('doctors', $hospital->doctors->pluck('id')->toArray())) ? 'selected' : '' }}>{{ $doctor->name }} ({{ $doctor->specialization ?? 'General' }})</option>
+                    @endforeach
+                </select>
+                <small style="color:var(--muted-foreground)">Hold Ctrl (Windows) or Cmd (Mac) to select multiple.</small>
+            </div>
+
+            <div class="grid-2">
+                <div class="form-group">
+                    <label class="form-label">Features</label>
+                    <div id="features-container"></div>
+                    <button type="button" class="btn btn-secondary btn-sm" onclick="addFeature()" style="margin-top: 0.5rem;">+ Add Feature</button>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Services / Costs</label>
+                    <div id="services-container"></div>
+                    <button type="button" class="btn btn-secondary btn-sm" onclick="addService()" style="margin-top: 0.5rem;">+ Add Service</button>
+                </div>
+            </div>
         </div>
         <div class="card-footer" style="display: flex; gap: 0.75rem;">
+            <button type="submit" class="btn btn-primary">Update Hospital</button>
+            <a href="{{ route('hospital-owner.hospitals.index') }}" class="btn btn-secondary">Cancel</a>
+        </div>
+    </form>
+</div>
+
+<script>
+function addFeature(val = '') {
+    const container = document.getElementById('features-container');
+    const div = document.createElement('div');
+    div.style.display = 'flex';
+    div.style.gap = '0.5rem';
+    div.style.marginBottom = '0.5rem';
+    div.innerHTML = `
+        <input type="text" name="features[]" class="form-input" placeholder="e.g. 24/7 ICU" value="${val}" required>
+        <button type="button" class="btn btn-danger btn-sm" onclick="this.parentElement.remove()" style="padding: 0 0.5rem;">X</button>
+    `;
+    container.appendChild(div);
+}
+
+function addService(name = '', price = '') {
+    const container = document.getElementById('services-container');
+    const div = document.createElement('div');
+    div.style.display = 'flex';
+    div.style.gap = '0.5rem';
+    div.style.marginBottom = '0.5rem';
+    const id = Date.now() + Math.floor(Math.random() * 1000);
+    div.innerHTML = `
+        <input type="text" name="services[${id}][name]" class="form-input" placeholder="Service Name" value="${name}" required>
+        <input type="number" step="0.01" name="services[${id}][price]" class="form-input" placeholder="Price" value="${price}" style="width: 100px;" required>
+        <button type="button" class="btn btn-danger btn-sm" onclick="this.parentElement.remove()" style="padding: 0 0.5rem;">X</button>
+    `;
+    container.appendChild(div);
+}
+
+window.onload = () => {
+    let featureCount = 0;
+    @foreach($hospital->features as $f)
+        addFeature("{!! addslashes($f->name) !!}");
+        featureCount++;
+    @endforeach
+    if (featureCount === 0) addFeature();
+
+    let serviceCount = 0;
+    @foreach($hospital->services as $s)
+        addService("{!! addslashes($s->name) !!}", "{{ $s->price }}");
+        serviceCount++;
+    @endforeach
+    if (serviceCount === 0) addService();
+};
+</script>
             <button type="submit" class="btn btn-primary">Update Hospital</button>
             <a href="{{ route('hospital-owner.hospitals.index') }}" class="btn btn-secondary">Cancel</a>
         </div>

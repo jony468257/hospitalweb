@@ -22,7 +22,8 @@ class HospitalController extends Controller
     {
         $thanas = Thana::all();
         $countries = Country::all();
-        return view('hospital-owner.hospitals.create', compact('thanas', 'countries'));
+        $doctors = \App\Models\Doctor::all();
+        return view('hospital-owner.hospitals.create', compact('thanas', 'countries', 'doctors'));
     }
 
     public function store(Request $request)
@@ -36,12 +37,49 @@ class HospitalController extends Controller
             'description' => 'nullable|string',
             'latitude' => 'nullable|numeric',
             'longitude' => 'nullable|numeric',
+            'features' => 'nullable|array',
+            'features.*' => 'nullable|string',
+            'services' => 'nullable|array',
+            'services.*.name' => 'required_with:services.*.price|string',
+            'services.*.price' => 'required_with:services.*.name|numeric',
+            'doctors' => 'nullable|array',
+            'doctors.*' => 'exists:doctors,id'
         ]);
 
         $data['user_id'] = Auth::id();
         $data['slug'] = Str::slug($data['name']) . '-' . rand(1000, 9999);
 
-        Hospital::create($data);
+        // Extract relations data
+        $features = $data['features'] ?? [];
+        $services = $data['services'] ?? [];
+        $doctors = $data['doctors'] ?? [];
+        
+        // Exclude relations from direct hospital creation
+        unset($data['features'], $data['services'], $data['doctors']);
+
+        $hospital = Hospital::create($data);
+
+        // Save Features
+        foreach ($features as $featureName) {
+            if (!empty($featureName)) {
+                $hospital->features()->create(['name' => $featureName]);
+            }
+        }
+
+        // Save Services
+        foreach ($services as $service) {
+            if (!empty($service['name']) && isset($service['price'])) {
+                $hospital->services()->create([
+                    'name' => $service['name'],
+                    'price' => $service['price']
+                ]);
+            }
+        }
+
+        // Sync Doctors
+        if (!empty($doctors)) {
+            $hospital->doctors()->sync($doctors);
+        }
 
         return redirect()->route('hospital-owner.hospitals.index')->with('success', 'Hospital created successfully.');
     }
@@ -54,7 +92,8 @@ class HospitalController extends Controller
 
         $thanas = Thana::all();
         $countries = Country::all();
-        return view('hospital-owner.hospitals.edit', compact('hospital', 'thanas', 'countries'));
+        $doctors = \App\Models\Doctor::all();
+        return view('hospital-owner.hospitals.edit', compact('hospital', 'thanas', 'countries', 'doctors'));
     }
 
     public function update(Request $request, Hospital $hospital)
@@ -72,9 +111,46 @@ class HospitalController extends Controller
             'description' => 'nullable|string',
             'latitude' => 'nullable|numeric',
             'longitude' => 'nullable|numeric',
+            'features' => 'nullable|array',
+            'features.*' => 'nullable|string',
+            'services' => 'nullable|array',
+            'services.*.name' => 'required_with:services.*.price|string',
+            'services.*.price' => 'required_with:services.*.name|numeric',
+            'doctors' => 'nullable|array',
+            'doctors.*' => 'exists:doctors,id'
         ]);
 
+        // Extract relations data
+        $features = $data['features'] ?? [];
+        $services = $data['services'] ?? [];
+        $doctors = $data['doctors'] ?? [];
+        
+        // Exclude relations from direct hospital update
+        unset($data['features'], $data['services'], $data['doctors']);
+
         $hospital->update($data);
+
+        // Re-create Features (delete old ones to prevent duplicates/missing deletions)
+        $hospital->features()->delete();
+        foreach ($features as $featureName) {
+            if (!empty($featureName)) {
+                $hospital->features()->create(['name' => $featureName]);
+            }
+        }
+
+        // Re-create Services
+        $hospital->services()->delete();
+        foreach ($services as $service) {
+            if (!empty($service['name']) && isset($service['price'])) {
+                $hospital->services()->create([
+                    'name' => $service['name'],
+                    'price' => $service['price']
+                ]);
+            }
+        }
+
+        // Sync Doctors
+        $hospital->doctors()->sync($doctors);
 
         return redirect()->route('hospital-owner.hospitals.index')->with('success', 'Hospital updated successfully.');
     }

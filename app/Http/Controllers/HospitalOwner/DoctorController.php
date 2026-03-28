@@ -37,6 +37,7 @@ class DoctorController extends Controller
             'experience_year' => 'nullable|integer',
             'bio' => 'nullable|string',
             'email' => 'required|email|unique:users,email',
+            'password' => 'required|min:8',
         ]);
 
         $hospital = Hospital::findOrFail($data['hospital_id']);
@@ -44,7 +45,17 @@ class DoctorController extends Controller
             abort(403);
         }
 
+        // Create the User first
+        $user = \App\Models\User::create([
+            'name' => $data['name'],
+            'email' => $data['email'],
+            'password' => bcrypt($data['password']),
+            'role' => 'doctor',
+        ]);
+
+        // Create the Doctor Profile
         $doctor = Doctor::create([
+            'user_id' => $user->id,
             'name' => $data['name'],
             'specialization' => $data['specialization'],
             'degree' => $data['degree'],
@@ -55,7 +66,7 @@ class DoctorController extends Controller
 
         $doctor->hospitals()->attach($hospital->id);
 
-        return redirect()->route('hospital-owner.doctors.index')->with('success', 'Doctor added to hospital.');
+        return redirect()->route('hospital-owner.doctors.index')->with('success', 'Doctor created and added to hospital successfully.');
     }
 
     public function edit(Doctor $doctor)
@@ -89,5 +100,27 @@ class DoctorController extends Controller
         $doctor->update($data);
 
         return redirect()->route('hospital-owner.doctors.index')->with('success', 'Doctor updated.');
+    }
+
+    public function destroy(Doctor $doctor)
+    {
+        // Ownership check
+        $hospitalIds = Auth::user()->hospitals()->pluck('id')->toArray();
+        if (!$doctor->hospitals()->whereIn('hospitals.id', $hospitalIds)->exists()) {
+            abort(403);
+        }
+
+        // Optional: Detach from all of owner's hospitals
+        // Or completely delete the doctor and user
+        $doctor->hospitals()->detach($hospitalIds);
+        
+        // If the doctor belongs to no other hospitals, you might choose to delete their User profile too.
+        if ($doctor->hospitals()->count() === 0) {
+            $userId = $doctor->user_id;
+            $doctor->delete();
+            \App\Models\User::where('id', $userId)->delete();
+        }
+
+        return redirect()->route('hospital-owner.doctors.index')->with('success', 'Doctor removed successfully.');
     }
 }
