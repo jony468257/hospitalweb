@@ -39,7 +39,7 @@
                     <select id="country_id" name="country_id" class="form-input @error('country_id') is-invalid @enderror" required>
                         <option value="">Select Country</option>
                         @foreach($countries as $country)
-                            <option value="{{ $country->id }}" {{ old('country_id') == $country->id ? 'selected' : '' }}>{{ $country->name }}</option>
+                        <option value="{{ $country->id }}" {{ old('country_id') == $country->id ? 'selected' : '' }}>{{ $country->name }}</option>
                         @endforeach
                     </select>
                     @error('country_id') <span class="form-error">{{ $message }}</span> @enderror
@@ -50,7 +50,7 @@
                     <select id="thana_id" name="thana_id" class="form-input @error('thana_id') is-invalid @enderror" required>
                         <option value="">Select Thana</option>
                         @foreach($thanas as $thana)
-                            <option value="{{ $thana->id }}" {{ old('thana_id') == $thana->id ? 'selected' : '' }}>{{ $thana->name }}</option>
+                        <option value="{{ $thana->id }}" {{ old('thana_id') == $thana->id ? 'selected' : '' }}>{{ $thana->name }}</option>
                         @endforeach
                     </select>
                     @error('thana_id') <span class="form-error">{{ $message }}</span> @enderror
@@ -89,7 +89,7 @@
                 <label for="doctors" class="form-label">Associated Doctors</label>
                 <select id="doctors" name="doctors[]" class="form-input" multiple style="height: 120px;">
                     @foreach($doctors as $doctor)
-                        <option value="{{ $doctor->id }}">{{ $doctor->name }} ({{ $doctor->specialization ?? 'General' }})</option>
+                    <option value="{{ $doctor->id }}">{{ $doctor->name }} ({{ $doctor->specialization ?? 'General' }})</option>
                     @endforeach
                 </select>
                 <small style="color:var(--muted-foreground)">Hold Ctrl (Windows) or Cmd (Mac) to select multiple.</small>
@@ -117,38 +117,37 @@
 </div>
 
 <script>
-function addFeature(val = '') {
-    const container = document.getElementById('features-container');
-    const div = document.createElement('div');
-    div.style.display = 'flex';
-    div.style.gap = '0.5rem';
-    div.style.marginBottom = '0.5rem';
-    div.innerHTML = `
+    function addFeature(val = '') {
+        const container = document.getElementById('features-container');
+        const div = document.createElement('div');
+        div.style.display = 'flex';
+        div.style.gap = '0.5rem';
+        div.style.marginBottom = '0.5rem';
+        div.innerHTML = `
         <input type="text" name="features[]" class="form-input" placeholder="e.g. 24/7 ICU" value="${val}" required>
         <button type="button" class="btn btn-danger btn-sm" onclick="this.parentElement.remove()" style="padding: 0 0.5rem;">X</button>
     `;
-    container.appendChild(div);
-}
+        container.appendChild(div);
+    }
 
-function addService(name = '', price = '') {
-    const container = document.getElementById('services-container');
-    const div = document.createElement('div');
-    div.style.display = 'flex';
-    div.style.gap = '0.5rem';
-    div.style.marginBottom = '0.5rem';
-    const id = Date.now() + Math.floor(Math.random() * 1000);
-    div.innerHTML = `
+    function addService(name = '', price = '') {
+        const container = document.getElementById('services-container');
+        const div = document.createElement('div');
+        div.style.display = 'flex';
+        div.style.gap = '0.5rem';
+        div.style.marginBottom = '0.5rem';
+        const id = Date.now() + Math.floor(Math.random() * 1000);
+        div.innerHTML = `
         <input type="text" name="services[${id}][name]" class="form-input" placeholder="Service Name" value="${name}" required>
         <input type="number" step="0.01" name="services[${id}][price]" class="form-input" placeholder="Price" value="${price}" style="width: 100px;" required>
         <button type="button" class="btn btn-danger btn-sm" onclick="this.parentElement.remove()" style="padding: 0 0.5rem;">X</button>
     `;
-    container.appendChild(div);
-}
+        container.appendChild(div);
+    }
 
-window.onload = () => {
-    addFeature();
-    addService();
-};
+    window.onload = () => {
+        addFeature();
+        addService();
+    };
 </script>
 @endsection
-
