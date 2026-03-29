@@ -162,9 +162,5 @@ window.onload = () => {
     if (serviceCount === 0) addService();
 };
 </script>
-            <button type="submit" class="btn btn-primary">Update Hospital</button>
-            <a href="{{ route('hospital-owner.hospitals.index') }}" class="btn btn-secondary">Cancel</a>
-        </div>
-    </form>
-</div>
 @endsection
+
