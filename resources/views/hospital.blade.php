@@ -7,6 +7,8 @@
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=inter:400,500,600,700&display=swap" rel="stylesheet" />
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
     <!-- Styles -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <style>
@@ -18,8 +20,9 @@
     <!-- Top Nav -->
     <header class="bg-white shadow-sm sticky top-0 z-50">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
-            <a href="/" class="text-2xl font-bold tracking-tighter select-none">
-                <span class="text-[#4285f4]">M</span><span class="text-[#ea4335]">e</span><span class="text-[#fbbc05]">d</span><span class="text-[#4285f4]">i</span><span class="text-[#34a853]">C</span><span class="text-[#ea4335]">o</span>
+            <a href="/" class="flex items-center space-x-2 text-blue-600 font-bold text-xl">
+                <i data-lucide="activity" class="w-7 h-7"></i>
+                <span>MediConnect</span>
             </a>
             <nav class="space-x-4 text-sm font-medium">
                 @if (Route::has('login'))
@@ -129,5 +132,10 @@
 
         </div>
     </main>
+
+    <!-- Initialize Lucide Icons -->
+    <script>
+      lucide.createIcons();
+    </script>
 </body>
 </html>
