@@ -71,7 +71,7 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="latitude" class="form-label">Latitude (optional)</label>
+                    <label for="latitude" class="form-label">Latitude optional</label>
                     <input type="text" id="latitude" name="latitude" class="form-input @error('latitude') is-invalid @enderror" value="{{ old('latitude') }}">
                 </div>
             </div>
