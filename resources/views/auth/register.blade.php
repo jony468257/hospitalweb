@@ -1,207 +1,128 @@
 <x-guest-layout>
-<style>
-    :root {
-        --fb-bg: linear-gradient(135deg, #f0f2f5 0%, #e7e9ed 100%);
-        --fb-blue: #1877f2;
-        --fb-green: #42b72a;
-        --fb-card-shadow: 0 2px 4px rgba(0, 0, 0, .1), 0 8px 16px rgba(0, 0, 0, .1);
-    }
-
-    body {
-        background: var(--fb-bg);
-        font-family: 'Inter', system-ui, -apple-system, sans-serif;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        min-height: 100vh;
-        margin: 0;
-    }
-
-    .reg-container {
-        width: 100%;
-        max-width: 432px;
-        padding: 20px;
-    }
-
-    .reg-card {
-        background: #fff;
-        border-radius: 8px;
-        box-shadow: var(--fb-card-shadow);
-        padding: 20px 20px 28px;
-    }
-
-    .reg-header {
-        text-align: center;
-        margin-bottom: 20px;
-    }
-
-    .reg-title {
-        font-size: 32px;
-        font-weight: 700;
-        color: var(--fb-blue);
-        margin-bottom: 8px;
-    }
-
-    .reg-subtitle {
-        font-size: 15px;
-        color: #606770;
-    }
-
-    .form-group {
-        margin-bottom: 12px;
-    }
-
-    .input-field {
-        width: 100%;
-        padding: 14px 16px;
-        border: 1px solid #dddfe2;
-        border-radius: 6px;
-        font-size: 17px;
-        box-sizing: border-box;
-        transition: border-color 0.2s;
-    }
-
-    .input-field:focus {
-        border-color: var(--fb-blue);
-        outline: none;
-        box-shadow: 0 0 0 2px #e7f3ff;
-    }
-
-    .role-grid {
-        display: grid;
-        grid-template-columns: repeat(4, 1fr);
-        gap: 8px;
-        margin-bottom: 16px;
-    }
-
-    .role-option {
-        border: 1px solid #dddfe2;
-        border-radius: 6px;
-        padding: 10px;
-        text-align: center;
-        cursor: pointer;
-        transition: all 0.2s;
-        font-size: 13px;
-        font-weight: 500;
-        color: #606770;
-    }
-
-    .role-option:hover {
-        background: #f5f6f7;
-    }
-
-    .role-option.active {
-        border-color: var(--fb-blue);
-        background: #e7f3ff;
-        color: var(--fb-blue);
-    }
-
-    .btn-submit {
-        width: 100%;
-        background: var(--fb-green);
-        color: #fff;
-        border: none;
-        border-radius: 6px;
-        padding: 12px;
-        font-size: 20px;
-        font-weight: 700;
-        cursor: pointer;
-        margin-top: 10px;
-        transition: background 0.2s;
-    }
-
-    .btn-submit:hover {
-        background: #36a420;
-    }
-
-    .divider {
-        align-items: center;
-        border-bottom: 1px solid #dadde1;
-        display: flex;
-        margin: 20px 0;
-        text-align: center;
-    }
-
-    .footer-links {
-        text-align: center;
-        margin-top: 16px;
-    }
-
-    .footer-links a {
-        color: var(--fb-blue);
-        text-decoration: none;
-        font-weight: 600;
-    }
-
-    .error-msg {
-        color: #f02849;
-        font-size: 12px;
-        margin-top: 4px;
-        display: block;
-    }
-</style>
-
-<div class="reg-container">
-    <div class="reg-card">
-        <div class="reg-header">
-            <h1 class="reg-title">Create Account</h1>
-            <p class="reg-subtitle">It's quick and easy.</p>
-        </div>
-
-        <form method="POST" action="{{ route('register') }}">
-            @csrf
-
-            <div class="form-group">
-                <input type="text" name="name" class="input-field" placeholder="Full name" value="{{ old('name') }}" required autofocus>
-                @if($errors->has('name')) <span class="error-msg">{{ $errors->first('name') }}</span> @endif
+    <div class="min-h-[80vh] flex items-center justify-center p-16 sm:p-32">
+        <div class="max-w-6xl w-full grid grid-cols-1 lg:grid-cols-2 gap-0 overflow-hidden rounded-[24px] shadow-2xl border border-slate-100 bg-white">
+            
+            <!-- Branding/Image Side -->
+            <div class="hidden lg:flex relative flex-col justify-end p-48 bg-slate-900 border-r border-white/5">
+                <div class="absolute inset-0 opacity-40">
+                    <img src="https://images.unsplash.com/photo-1579684385127-1ef15d508118?auto=format&fit=crop&q=80&w=1200" alt="Medical Science" class="w-full h-full object-cover">
+                </div>
+                <div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-900/40 to-transparent"></div>
+                
+                <div class="relative z-10">
+                    <h2 class="text-[40px] font-black text-white leading-tight mb-16 italic font-serif">Join the <span class="text-medical-teal">Future</span> of <span class="text-sky-400">Healthcare</span> Delivery.</h2>
+                    <p class="text-h2 text-white/70 font-medium mb-32 max-w-sm">Create an account to start your journey with Bangladesh's most advanced medical portal.</p>
+                    
+                    <div class="space-y-16">
+                        <div class="flex items-center text-white/80 text-small font-bold">
+                            <div class="w-8 h-8 bg-medical-green rounded-full flex items-center justify-center mr-12"><svg class="w-5 h-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"/></svg></div>
+                            Verified Medical Network
+                        </div>
+                        <div class="flex items-center text-white/80 text-small font-bold">
+                            <div class="w-8 h-8 bg-medical-green rounded-full flex items-center justify-center mr-12"><svg class="w-5 h-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"/></svg></div>
+                            24/7 Support & Scheduling
+                        </div>
+                    </div>
+                </div>
             </div>
 
-            <div class="form-group">
-                <input type="email" name="email" class="input-field" placeholder="Email address" value="{{ old('email') }}" required>
-                @if($errors->has('email')) <span class="error-msg">{{ $errors->first('email') }}</span> @endif
+            <!-- Form Side -->
+            <div class="p-32 sm:p-48 flex flex-col justify-center">
+                <div class="mb-32">
+                    <h1 class="text-h1 text-secondary mb-4">Create <span class="text-primary font-black italic tracking-tighter">Account</span></h1>
+                    <p class="text-body text-muted font-medium">It's quick, easy, and secure.</p>
+                </div>
+
+                <form method="POST" action="{{ route('register') }}" class="space-y-16">
+                    @csrf
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-16">
+                        <!-- Full Name -->
+                        <div class="space-y-6">
+                            <label for="name" class="text-[10px] font-extrabold text-secondary uppercase tracking-widest">Full Name</label>
+                            <x-input id="name" type="text" name="name" :value="old('name')" placeholder="John Doe" required autofocus />
+                            <x-input-error :messages="$errors->get('name')" class="mt-1" />
+                        </div>
+
+                        <!-- Email -->
+                        <div class="space-y-6">
+                            <label for="email" class="text-[10px] font-extrabold text-secondary uppercase tracking-widest">Email</label>
+                            <x-input id="email" type="email" name="email" :value="old('email')" placeholder="john@example.com" required />
+                            <x-input-error :messages="$errors->get('email')" class="mt-1" />
+                        </div>
+                    </div>
+
+                    <!-- Phone -->
+                    <div class="space-y-6">
+                        <label for="phone" class="text-[10px] font-extrabold text-secondary uppercase tracking-widest">Phone Number</label>
+                        <x-input id="phone" type="text" name="phone" :value="old('phone')" placeholder="017XXXXXXXX" required />
+                        <x-input-error :messages="$errors->get('phone')" class="mt-1" />
+                    </div>
+
+                    <!-- Role Selector -->
+                    <div class="space-y-8">
+                        <label class="text-[10px] font-extrabold text-secondary uppercase tracking-widest">Register As</label>
+                        <div class="grid grid-cols-2 sm:grid-cols-4 gap-8" id="roleSelector">
+                            @php
+                                $roles = [
+                                    ['id' => 'patient', 'label' => 'Patient'],
+                                    ['id' => 'hospital_owner', 'label' => 'Hospital'],
+                                    ['id' => 'pharmacy_owner', 'label' => 'Pharmacy'],
+                                    ['id' => 'doctor', 'label' => 'Doctor'],
+                                ];
+                            @endphp
+                            @foreach($roles as $role)
+                                <div 
+                                    data-role="{{ $role['id'] }}"
+                                    class="role-option group cursor-pointer p-12 rounded-card border-2 transition-all text-center
+                                    {{ old('role', 'patient') == $role['id'] ? 'border-primary bg-primary/5 text-primary' : 'border-slate-100 bg-slate-50 text-muted hover:border-slate-200' }}"
+                                >
+                                    <span class="text-[11px] font-black uppercase tracking-tighter">{{ $role['label'] }}</span>
+                                </div>
+                            @endforeach
+                        </div>
+                        <input type="hidden" name="role" id="roleInput" value="{{ old('role', 'patient') }}">
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-16">
+                        <!-- Password -->
+                        <div class="space-y-6">
+                            <label for="password" class="text-[10px] font-extrabold text-secondary uppercase tracking-widest">Password</label>
+                            <x-input id="password" type="password" name="password" placeholder="••••••••" required />
+                            <x-input-error :messages="$errors->get('password')" class="mt-1" />
+                        </div>
+
+                        <!-- Confirm Password -->
+                        <div class="space-y-6">
+                            <label for="password_confirmation" class="text-[10px] font-extrabold text-secondary uppercase tracking-widest">Confirm</label>
+                            <x-input id="password_confirmation" type="password" name="password_confirmation" placeholder="••••••••" required />
+                        </div>
+                    </div>
+
+                    <div class="pt-16">
+                        <x-button variant="primary" class="w-full font-black py-16 text-h2 shadow-xl shadow-primary/20">Create My Account</x-button>
+                    </div>
+
+                    <p class="text-center text-small font-bold text-muted mt-24">
+                        Already have an account? 
+                        <a href="{{ route('login') }}" class="text-primary hover:underline decoration-2 underline-offset-4">Log in here</a>
+                    </p>
+                </form>
             </div>
-
-            <div class="form-group">
-                <input type="text" name="phone" class="input-field" placeholder="Mobile number" value="{{ old('phone') }}" required>
-                @if($errors->has('phone')) <span class="error-msg">{{ $errors->first('phone') }}</span> @endif
-            </div>
-
-            <p style="font-size: 14px; color: #606770; margin: 8px 0;">Select your role:</p>
-            <div class="role-grid" id="roleSelector">
-                <div class="role-option @if(old('role', 'patient') == 'patient') active @endif" data-role="patient">Patient</div>
-                <div class="role-option @if(old('role') == 'hospital_owner') active @endif" data-role="hospital_owner">Hospital</div>
-                <div class="role-option @if(old('role') == 'pharmacy_owner') active @endif" data-role="pharmacy_owner">Pharmacy</div>
-                <div class="role-option @if(old('role') == 'doctor') active @endif" data-role="doctor">Doctor</div>
-            </div>
-            <input type="hidden" name="role" id="roleInput" value="{{ old('role', 'patient') }}">
-
-            <div class="form-group">
-                <input type="password" name="password" class="input-field" placeholder="New password" required>
-                @if($errors->has('password')) <span class="error-msg">{{ $errors->first('password') }}</span> @endif
-            </div>
-
-            <div class="form-group">
-                <input type="password" name="password_confirmation" class="input-field" placeholder="Confirm password" required>
-            </div>
-
-            <button type="submit" class="btn-submit">Sign Up</button>
-        </form>
-
-        <div class="divider"></div>
-
-        <div class="footer-links">
-            <a href="{{ route('login') }}">Already have an account?</a>
         </div>
     </div>
-</div>
 
-<script>
-    document.querySelectorAll('.role-option').forEach(option => {
-        option.addEventListener('click', function() {
-            document.querySelectorAll('.role-option').forEach(opt => opt.classList.remove('active'));
-            this.classList.add('active');
-            document.getElementById('roleInput').value = this.dataset.role;
+    <script>
+        document.querySelectorAll('.role-option').forEach(option => {
+            option.addEventListener('click', function() {
+                document.querySelectorAll('.role-option').forEach(opt => {
+                    opt.classList.remove('border-primary', 'bg-primary/5', 'text-primary');
+                    opt.classList.add('border-slate-100', 'bg-slate-50', 'text-muted');
+                });
+                this.classList.remove('border-slate-100', 'bg-slate-50', 'text-muted');
+                this.classList.add('border-primary', 'bg-primary/5', 'text-primary');
+                document.getElementById('roleInput').value = this.dataset.role;
+            });
         });
-    });
-</script>
+    </script>
 </x-guest-layout>

@@ -1,335 +1,189 @@
-@extends('tyro-dashboard::layouts.admin')
+<x-app-layout>
+    <div class="space-y-32">
+        
+        <!-- Header -->
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-16">
+            <div>
+                <h1 class="text-h1 text-secondary mb-4 tracking-tight">System <span class="text-primary font-black italic">Overview</span></h1>
+                <p class="text-body text-muted flex items-center">
+                    <span class="w-8 h-8 bg-medical-green rounded-full mr-8 animate-pulse"></span>
+                    MediConnect Central Command • {{ now()->format('l, d F Y') }}
+                </p>
+            </div>
+            <div class="flex items-center space-x-12">
+                <x-button variant="outline" class="hidden md:flex">Download Report</x-button>
+                <x-button variant="primary" class="shadow-lg shadow-primary/20">Add New Entry</x-button>
+            </div>
+        </div>
 
-@section('title', 'Admin Dashboard')
+        <!-- Key Stats Grid -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-24">
+            <!-- Total Users -->
+            <x-card class="bg-white border-none shadow-sm relative overflow-hidden group">
+                <div class="absolute top-0 right-0 w-16 h-16 bg-primary/5 rounded-bl-full group-hover:scale-[4] transition-transform duration-500"></div>
+                <div class="p-24 relative z-10">
+                    <div class="w-12 h-12 bg-primary/10 text-primary rounded-card flex items-center justify-center mb-16">
+                        <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" /></svg>
+                    </div>
+                    <h3 class="text-small font-bold text-muted uppercase tracking-widest mb-4">Total Users</h3>
+                    <p class="text-h1 text-secondary font-black tracking-tighter">{{ number_format($stats['total_users']) }}</p>
+                    <div class="mt-8 flex items-center text-[10px] font-bold text-medical-green uppercase tracking-wider">
+                        <svg class="w-3 h-3 mr-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 15l7-7 7 7"/></svg>
+                        12% Monthly Growth
+                    </div>
+                </div>
+            </x-card>
 
-@section('breadcrumb')
-<span>Dashboard</span>
-@endsection
+            <!-- Total Doctors -->
+            <x-card class="bg-white border-none shadow-sm relative overflow-hidden group">
+                <div class="absolute top-0 right-0 w-16 h-16 bg-medical-teal/5 rounded-bl-full group-hover:scale-[4] transition-transform duration-500"></div>
+                <div class="p-24 relative z-10">
+                    <div class="w-12 h-12 bg-medical-teal/10 text-medical-teal rounded-card flex items-center justify-center mb-16">
+                        <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" /></svg>
+                    </div>
+                    <h3 class="text-small font-bold text-muted uppercase tracking-widest mb-4">Doctors</h3>
+                    <p class="text-h1 text-secondary font-black tracking-tighter">{{ number_format($stats['total_doctors']) }}</p>
+                    <div class="mt-8 flex items-center text-[10px] font-bold text-medical-teal uppercase tracking-wider">
+                        Verified Professionals
+                    </div>
+                </div>
+            </x-card>
 
-@section('content')
-<div class="page-header">
-    <div class="page-header-row">
-        <div>
-            <h1 class="page-title">👋 Welcome back, {{ $user->name }}!</h1>
-            <p class="page-description" style="font-size: 1rem;">Medical Search Engine — Admin Overview</p>
-        </div>
-        <div style="font-size: 0.875rem; color: var(--muted-foreground);">
-            {{ now()->format('l, d F Y') }}
-        </div>
-    </div>
-</div>
+            <!-- Total Hospitals -->
+            <x-card class="bg-white border-none shadow-sm relative overflow-hidden group">
+                <div class="absolute top-0 right-0 w-16 h-16 bg-medical-green/5 rounded-bl-full group-hover:scale-[4] transition-transform duration-500"></div>
+                <div class="p-24 relative z-10">
+                    <div class="w-12 h-12 bg-medical-green/10 text-medical-green rounded-card flex items-center justify-center mb-16">
+                        <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" /></svg>
+                    </div>
+                    <h3 class="text-small font-bold text-muted uppercase tracking-widest mb-4">Hospitals</h3>
+                    <p class="text-h1 text-secondary font-black tracking-tighter">{{ number_format($stats['total_hospitals']) }}</p>
+                    <div class="mt-8 flex items-center text-[10px] font-bold text-medical-green uppercase tracking-wider">
+                        Active Facilities
+                    </div>
+                </div>
+            </x-card>
 
-{{-- ============================================================
-     STAT CARDS — Row 1: Core Counts
-     ============================================================ --}}
-<div class="stats-grid" style="margin-bottom: 1.5rem;">
+            <!-- Total Pharmacies -->
+            <x-card class="bg-white border-none shadow-sm relative overflow-hidden group">
+                <div class="absolute top-0 right-0 w-16 h-16 bg-medical-red/5 rounded-bl-full group-hover:scale-[4] transition-transform duration-500"></div>
+                <div class="p-24 relative z-10">
+                    <div class="w-12 h-12 bg-medical-red/10 text-medical-red rounded-card flex items-center justify-center mb-16">
+                        <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z" /></svg>
+                    </div>
+                    <h3 class="text-small font-bold text-muted uppercase tracking-widest mb-4">Pharmacies</h3>
+                    <p class="text-h1 text-secondary font-black tracking-tighter">{{ number_format($stats['total_pharmacies']) }}</p>
+                    <div class="mt-8 flex items-center text-[10px] font-bold text-medical-red uppercase tracking-wider">
+                        Medicine Partners
+                    </div>
+                </div>
+            </x-card>
+        </div>
 
-    {{-- Total Users --}}
-    <div class="stat-card">
-        <div class="stat-icon stat-icon-primary">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z" />
-            </svg>
-        </div>
-        <div class="stat-content">
-            <div class="stat-label" style="font-size: 0.9375rem;">Total Users</div>
-            <div class="stat-value">{{ number_format($stats['total_users']) }}</div>
-        </div>
-    </div>
-
-    {{-- Doctors --}}
-    <div class="stat-card">
-        <div class="stat-icon stat-icon-success">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" />
-            </svg>
-        </div>
-        <div class="stat-content">
-            <div class="stat-label" style="font-size: 0.9375rem;">Doctors</div>
-            <div class="stat-value">{{ number_format($stats['total_doctors']) }}</div>
-        </div>
-    </div>
-
-    {{-- Hospitals --}}
-    <div class="stat-card">
-        <div class="stat-icon stat-icon-info">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
-            </svg>
-        </div>
-        <div class="stat-content">
-            <div class="stat-label" style="font-size: 0.9375rem;">Hospitals</div>
-            <div class="stat-value">{{ number_format($stats['total_hospitals']) }}</div>
-        </div>
-    </div>
-
-    {{-- Pharmacies --}}
-    <div class="stat-card">
-        <div class="stat-icon stat-icon-warning">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z" />
-            </svg>
-        </div>
-        <div class="stat-content">
-            <div class="stat-label" style="font-size: 0.9375rem;">Pharmacies</div>
-            <div class="stat-value">{{ number_format($stats['total_pharmacies']) }}</div>
-        </div>
-    </div>
-
-</div>
-
-{{-- STAT CARDS — Row 2: Medical Data --}}
-<div class="stats-grid" style="margin-bottom: 1.5rem;">
-
-    <div class="stat-card">
-        <div class="stat-icon stat-icon-danger">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
-            </svg>
-        </div>
-        <div class="stat-content">
-            <div class="stat-label" style="font-size: 0.9375rem;">Diseases</div>
-            <div class="stat-value">{{ number_format($stats['total_diseases']) }}</div>
-        </div>
-    </div>
-
-    <div class="stat-card">
-        <div class="stat-icon stat-icon-primary">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M7 19h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2zM9 9h6v6H9V9z" />
-            </svg>
-        </div>
-        <div class="stat-content">
-            <div class="stat-label" style="font-size: 0.9375rem;">Medicines</div>
-            <div class="stat-value">{{ number_format($stats['total_medicines']) }}</div>
-        </div>
-    </div>
-
-    <div class="stat-card">
-        <div class="stat-icon stat-icon-warning">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-            </svg>
-        </div>
-        <div class="stat-content">
-            <div class="stat-label" style="font-size: 0.9375rem;">Pending Consultations</div>
-            <div class="stat-value">{{ number_format($stats['pending_consultations']) }}</div>
-        </div>
-    </div>
-
-    <div class="stat-card">
-        <div class="stat-icon stat-icon-success">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-            </svg>
-        </div>
-        <div class="stat-content">
-            <div class="stat-label" style="font-size: 0.9375rem;">System Status</div>
-            <div class="stat-value" style="font-size: 1.25rem; color: var(--success);">Online ✓</div>
-        </div>
-    </div>
-</div>
-
-{{-- ============================================================
-     TABLES — Row: Recent Consultations + Recent Doctors
-     ============================================================ --}}
-<div class="grid-2" style="margin-bottom: 1.5rem;">
-
-    {{-- Recent Consultations --}}
-    <div class="card">
-        <div class="card-header">
-            <h3 class="card-title" style="font-size: 1.0625rem;">🩺 Recent Consultations</h3>
-            <span class="badge badge-warning">{{ $stats['pending_consultations'] }} Pending</span>
-        </div>
-        <div class="card-body" style="padding: 0;">
-            @if($stats['recent_consultations']->count())
-            <div class="table-container">
-                <table class="table">
-                    <thead>
-                        <tr>
-                            <th>Patient</th>
-                            <th>Doctor</th>
-                            <th style="text-align:right;">Status</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach($stats['recent_consultations'] as $consult)
-                        <tr>
-                            <td>
-                                <div class="user-cell">
-                                    <div class="user-cell-avatar">{{ strtoupper(substr($consult->patient->name ?? 'P', 0, 1)) }}</div>
-                                    <div class="user-cell-info">
-                                        <div class="user-cell-name" style="font-size: 0.9375rem;">{{ $consult->patient->name ?? 'N/A' }}</div>
-                                        <div class="user-cell-email" style="font-size: 0.8125rem;">{{ $consult->scheduled_at ?? $consult->consult_date ?? '—' }}</div>
+        <!-- Activity Feed / Tables -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-32">
+            
+            <!-- Recent Consultations -->
+            <x-card class="p-0 border-none shadow-sm h-full">
+                <div class="p-24 border-b border-slate-50 flex items-center justify-between">
+                    <h3 class="text-h2 text-secondary font-bold">🩺 Recent Consultations</h3>
+                    <span class="px-8 py-4 bg-yellow-50 text-yellow-600 text-[9px] font-black uppercase rounded-full">{{ $stats['pending_consultations'] }} Pending</span>
+                </div>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left">
+                        <thead>
+                            <tr class="bg-slate-50/50">
+                                <th class="px-24 py-16 text-[10px] font-extrabold text-muted uppercase tracking-wider">Patient / Doctor</th>
+                                <th class="px-24 py-16 text-[10px] font-extrabold text-muted uppercase tracking-wider">Status</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-slate-50">
+                            @foreach($stats['recent_consultations'] as $consult)
+                            <tr>
+                                <td class="px-24 py-16">
+                                    <div class="flex items-center space-x-12">
+                                        <div class="w-10 h-10 rounded-full bg-primary/10 text-primary flex items-center justify-center font-black text-[11px]">
+                                            {{ strtoupper(substr($consult->patient->name ?? 'P', 0, 1)) }}
+                                        </div>
+                                        <div>
+                                            <p class="text-body font-bold text-secondary">{{ $consult->patient->name ?? 'N/A' }}</p>
+                                            <p class="text-small text-muted">Dr. {{ $consult->doctor->name ?? 'N/A' }}</p>
+                                        </div>
                                     </div>
-                                </div>
-                            </td>
-                            <td style="font-size: 0.9375rem;">{{ $consult->doctor->name ?? 'N/A' }}</td>
-                            <td style="text-align:right;">
-                                @php
-                                    $badgeClass = match($consult->status) {
-                                        'approved'  => 'badge-success',
-                                        'pending'   => 'badge-warning',
-                                        'rejected'  => 'badge-danger',
-                                        'completed' => 'badge-primary',
-                                        default     => 'badge-secondary',
-                                    };
-                                @endphp
-                                <span class="badge {{ $badgeClass }}">{{ ucfirst($consult->status) }}</span>
-                            </td>
-                        </tr>
-                        @endforeach
-                    </tbody>
-                </table>
-            </div>
-            @else
-            <div class="empty-state">
-                <p class="empty-state-description" style="font-size: 0.9375rem;">No consultations yet.</p>
-            </div>
-            @endif
-        </div>
-    </div>
+                                </td>
+                                <td class="px-24 py-16">
+                                    <span class="px-8 py-4 rounded-full text-[9px] font-black uppercase tracking-widest
+                                        {{ $consult->status === 'approved' ? 'bg-medical-green/10 text-medical-green' : 
+                                           ($consult->status === 'pending' ? 'bg-yellow-50 text-yellow-600' : 'bg-slate-100 text-muted') }}">
+                                        {{ $consult->status }}
+                                    </span>
+                                </td>
+                            </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
+            </x-card>
 
-    {{-- Recent Doctors --}}
-    <div class="card">
-        <div class="card-header">
-            <h3 class="card-title" style="font-size: 1.0625rem;">👨‍⚕️ Recently Joined Doctors</h3>
-        </div>
-        <div class="card-body" style="padding: 0;">
-            @if($stats['recent_doctors']->count())
-            <div class="table-container">
-                <table class="table">
-                    <thead>
-                        <tr>
-                            <th>Doctor</th>
-                            <th>Specialization</th>
-                            <th style="text-align:right;">Hospitals</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach($stats['recent_doctors'] as $doc)
-                        <tr>
-                            <td>
-                                <div class="user-cell">
-                                    <div class="user-cell-avatar">{{ strtoupper(substr($doc->name, 0, 1)) }}</div>
-                                    <div class="user-cell-info">
-                                        <div class="user-cell-name" style="font-size: 0.9375rem;">{{ $doc->name }}</div>
-                                        <div class="user-cell-email" style="font-size: 0.8125rem;">{{ $doc->degree ?? 'MBBS' }}</div>
+            <!-- New Doctors -->
+            <x-card class="p-0 border-none shadow-sm h-full">
+                <div class="p-24 border-b border-slate-50">
+                    <h3 class="text-h2 text-secondary font-bold">👨‍⚕️ Recently Joined Doctors</h3>
+                </div>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left">
+                        <thead>
+                            <tr class="bg-slate-50/50">
+                                <th class="px-24 py-16 text-[10px] font-extrabold text-muted uppercase tracking-wider">Doctor Specialist</th>
+                                <th class="px-24 py-16 text-[10px] font-extrabold text-muted uppercase tracking-wider text-right">Chambers</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-slate-50">
+                            @foreach($stats['recent_doctors'] as $doc)
+                            <tr>
+                                <td class="px-24 py-16">
+                                    <div class="flex items-center space-x-12">
+                                        <img src="https://i.pravatar.cc/100?u={{ $doc->id }}" class="w-10 h-10 rounded-full object-cover">
+                                        <div>
+                                            <p class="text-body font-bold text-secondary">{{ $doc->name }}</p>
+                                            <p class="text-small text-medical-teal font-bold">{{ $doc->specialization }}</p>
+                                        </div>
                                     </div>
-                                </div>
-                            </td>
-                            <td>
-                                <span class="badge badge-info" style="font-size: 0.8125rem;">{{ $doc->specialization }}</span>
-                            </td>
-                            <td style="text-align:right; font-size: 0.9375rem;">
-                                <strong>{{ $doc->hospitals->count() }}</strong>
-                            </td>
-                        </tr>
-                        @endforeach
-                    </tbody>
-                </table>
+                                </td>
+                                <td class="px-24 py-16 text-right font-black text-secondary">
+                                    {{ $doc->hospitals->count() }}
+                                </td>
+                            </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
+            </x-card>
+
+        </div>
+
+        <!-- Action Grid -->
+        <x-card class="border-none shadow-sm p-32 bg-slate-900 text-white">
+            <h3 class="text-h2 font-black mb-24 italic text-sky-400">⚡ Administrative Actions</h3>
+            <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-16">
+                <a href="{{ route('admin.users.index') }}" class="flex flex-col items-center justify-center p-16 rounded-card bg-white/5 hover:bg-white/10 transition-colors border border-white/5 group text-center">
+                    <svg class="w-8 h-8 mb-8 text-sky-400 group-hover:scale-110 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
+                    <span class="text-small font-bold uppercase tracking-tighter">Manage Users</span>
+                </a>
+                <a href="{{ route('admin.hospitals.index') }}" class="flex flex-col items-center justify-center p-16 rounded-card bg-white/5 hover:bg-white/10 transition-colors border border-white/5 group text-center">
+                    <svg class="w-8 h-8 mb-8 text-medical-green group-hover:scale-110 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg>
+                    <span class="text-small font-bold uppercase tracking-tighter">Hospitals</span>
+                </a>
+                <a href="{{ route('admin.doctors.index') }}" class="flex flex-col items-center justify-center p-16 rounded-card bg-white/5 hover:bg-white/10 transition-colors border border-white/5 group text-center">
+                    <svg class="w-8 h-8 mb-8 text-medical-teal group-hover:scale-110 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
+                    <span class="text-small font-bold uppercase tracking-tighter">Doctors</span>
+                </a>
+                <a href="{{ route('admin.pharmacies.index') }}" class="flex flex-col items-center justify-center p-16 rounded-card bg-white/5 hover:bg-white/10 transition-colors border border-white/5 group text-center">
+                    <svg class="w-8 h-8 mb-8 text-medical-red group-hover:scale-110 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"/></svg>
+                    <span class="text-small font-bold uppercase tracking-tighter">Pharmacies</span>
+                </a>
             </div>
-            @else
-            <div class="empty-state">
-                <p class="empty-state-description" style="font-size: 0.9375rem;">No doctors registered yet.</p>
-            </div>
-            @endif
-        </div>
-    </div>
-</div>
+        </x-card>
 
-{{-- Recent Hospitals --}}
-<div class="card" style="margin-bottom: 1.5rem;">
-    <div class="card-header">
-        <h3 class="card-title" style="font-size: 1.0625rem;">🏥 Recently Added Hospitals</h3>
     </div>
-    <div class="card-body" style="padding: 0;">
-        @if($stats['recent_hospitals']->count())
-        <div class="table-container">
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th>Hospital Name</th>
-                        <th>Location</th>
-                        <th>Phone</th>
-                        <th style="text-align:right;">Added</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach($stats['recent_hospitals'] as $hospital)
-                    <tr>
-                        <td>
-                            <strong style="font-size: 0.9375rem;">{{ $hospital->name }}</strong>
-                        </td>
-                        <td style="font-size: 0.9375rem;">
-                            {{ $hospital->thana->name ?? '—' }}
-                        </td>
-                        <td style="font-size: 0.9375rem;">{{ $hospital->phone ?? '—' }}</td>
-                        <td style="text-align:right; font-size: 0.8125rem; color: var(--muted-foreground);">
-                            {{ $hospital->created_at->diffForHumans() }}
-                        </td>
-                    </tr>
-                    @endforeach
-                </tbody>
-            </table>
-        </div>
-        @else
-        <div class="empty-state">
-            <p class="empty-state-description" style="font-size: 0.9375rem;">No hospitals registered yet.</p>
-        </div>
-        @endif
-    </div>
-</div>
-
-{{-- Quick Action Links --}}
-<div class="grid-2" style="margin-bottom: 1.5rem;">
-    <div class="card">
-        <div class="card-header">
-            <h3 class="card-title" style="font-size: 1.0625rem;">⚡ Quick Actions</h3>
-        </div>
-        <div class="card-body" style="display: flex; flex-wrap: wrap; gap: 0.75rem;">
-            <a href="{{ route('tyro-dashboard.users.index') }}" class="btn btn-primary btn-sm">👥 Manage Users</a>
-            <a href="{{ route('tyro-dashboard.roles.index') }}" class="btn btn-secondary btn-sm">🔑 Manage Roles</a>
-            <a href="#" class="btn btn-ghost btn-sm">🦠 Add Disease</a>
-            <a href="#" class="btn btn-ghost btn-sm">💊 Add Medicine</a>
-            <a href="#" class="btn btn-ghost btn-sm">🏥 Add Hospital</a>
-            <a href="#" class="btn btn-ghost btn-sm">👨‍⚕️ Add Doctor</a>
-        </div>
-    </div>
-
-    <div class="card">
-        <div class="card-header">
-            <h3 class="card-title" style="font-size: 1.0625rem;">📊 Database Summary</h3>
-        </div>
-        <div class="card-body" style="padding: 0;">
-            <div class="table-container">
-                <table class="table">
-                    <tbody>
-                        <tr>
-                            <td style="font-size: 0.9375rem;">🦠 Diseases</td>
-                            <td style="text-align:right;"><span class="badge badge-danger">{{ $stats['total_diseases'] }}</span></td>
-                        </tr>
-                        <tr>
-                            <td style="font-size: 0.9375rem;">💊 Medicines</td>
-                            <td style="text-align:right;"><span class="badge badge-primary">{{ $stats['total_medicines'] }}</span></td>
-                        </tr>
-                        <tr>
-                            <td style="font-size: 0.9375rem;">👨‍⚕️ Doctors</td>
-                            <td style="text-align:right;"><span class="badge badge-success">{{ $stats['total_doctors'] }}</span></td>
-                        </tr>
-                        <tr>
-                            <td style="font-size: 0.9375rem;">🏥 Hospitals</td>
-                            <td style="text-align:right;"><span class="badge badge-info">{{ $stats['total_hospitals'] }}</span></td>
-                        </tr>
-                        <tr>
-                            <td style="font-size: 0.9375rem;">💊 Pharmacies</td>
-                            <td style="text-align:right;"><span class="badge badge-warning">{{ $stats['total_pharmacies'] }}</span></td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-    </div>
-</div>
-
-@endsection
+</x-app-layout>

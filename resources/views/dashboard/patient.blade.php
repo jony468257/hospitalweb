@@ -1,331 +1,175 @@
-@extends('tyro-dashboard::layouts.user')
-
-@section('title', 'Patient Dashboard')
-
-@section('content')
-<style>
-    :root {
-        --fb-blue: #1877f2;
-        --fb-gray: #f0f2f5;
-        --card-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
-        --accent: #1877f2;
-    }
-
-    .dashboard-layout {
-        display: grid;
-        grid-template-columns: 280px 1fr 320px;
-        gap: 20px;
-        align-items: start;
-    }
-
-    @media (max-width: 1200px) {
-        .dashboard-layout {
-            grid-template-columns: 1fr 320px;
-        }
-        .left-col { display: none; }
-    }
-
-    @media (max-width: 900px) {
-        .dashboard-layout {
-            grid-template-columns: 1fr;
-        }
-        .right-col { display: none; }
-    }
-
-    /* Column Styles */
-    .left-col, .right-col {
-        position: sticky;
-        top: 20px;
-    }
-
-    /* Cards & Components */
-    .fb-card {
-        background: #fff;
-        border-radius: 8px;
-        box-shadow: var(--card-shadow);
-        margin-bottom: 20px;
-        border: 1px solid rgba(0,0,0,0.05); overflow: hidden;
-    }
-
-    .fb-card-header {
-        padding: 12px 16px;
-        border-bottom: 1px solid #f0f2f5;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-    }
-
-    .fb-card-title {
-        font-size: 17px;
-        font-weight: 600;
-        color: #65676b;
-    }
-
-    .fb-card-body {
-        padding: 16px;
-    }
-
-    /* Profile Widget */
-    .profile-widget {
-        text-align: center;
-        padding: 20px;
-    }
-
-    .profile-avatar {
-        width: 80px;
-        height: 80px;
-        background: linear-gradient(45deg, var(--fb-blue), #5ebfff);
-        border-radius: 50%;
-        margin: 0 auto 12px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 32px;
-        color: #fff;
-        font-weight: 700;
-        box-shadow: 0 4px 12px rgba(24, 119, 242, 0.2);
-    }
-
-    /* Feed Items */
-    .feed-item {
-        padding: 12px;
-        border-radius: 8px;
-        transition: background 0.2s;
-        display: flex;
-        gap: 12px;
-        margin-bottom: 8px;
-    }
-
-    .feed-item:hover {
-        background: var(--fb-gray);
-    }
-
-    .feed-icon {
-        width: 40px;
-        height: 40px;
-        border-radius: 50%;
-        background: #e7f3ff;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        color: var(--fb-blue);
-        flex-shrink: 0;
-    }
-
-    .feed-content {
-        flex: 1;
-    }
-
-    .feed-title {
-        font-weight: 600;
-        font-size: 15px;
-        margin-bottom: 2px;
-    }
-
-    .feed-meta {
-        font-size: 13px;
-        color: #65676b;
-    }
-
-    /* Stats Grid */
-    .mini-stats {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 12px;
-    }
-
-    .mini-stat-card {
-        background: #f0f2f5;
-        padding: 12px;
-        border-radius: 8px;
-        text-align: center;
-    }
-
-    .mini-stat-val {
-        font-size: 20px;
-        font-weight: 700;
-        color: var(--fb-blue);
-    }
-
-    .mini-stat-label {
-        font-size: 12px;
-        color: #65676b;
-    }
-
-    /* Animations */
-    @keyframes pulse {
-        0% { transform: scale(1); }
-        50% { transform: scale(1.05); }
-        100% { transform: scale(1); }
-    }
-
-    .status-badge {
-        display: inline-flex;
-        align-items: center;
-        gap: 6px;
-        padding: 4px 10px;
-        border-radius: 20px;
-        font-size: 12px;
-        font-weight: 600;
-    }
-
-    .status-pulse {
-        width: 8px;
-        height: 8px;
-        border-radius: 50%;
-        animation: pulse 2s infinite;
-    }
-</style>
-
-<div class="dashboard-layout">
-    {{-- Left Column: Navigation & Profile --}}
-    <div class="left-col">
-        <div class="fb-card">
-            <div class="profile-widget">
-                <div class="profile-avatar">
-                    {{ strtoupper(substr($user->name, 0, 1)) }}
-                </div>
-                <h2 style="margin: 0; font-size: 20px;">{{ $user->name }}</h2>
-                <p style="color: #65676b; font-size: 14px; margin: 4px 0 16px;">Member since {{ $user->created_at->format('M Y') }}</p>
-                
-                <div class="mini-stats">
-                    <div class="mini-stat-card">
-                        <div class="mini-stat-val">{{ $stats['my_consultations'] }}</div>
-                        <div class="mini-stat-label">Bookings</div>
-                    </div>
-                    <div class="mini-stat-card">
-                        <div class="mini-stat-val">{{ $stats['bookmarks'] }}</div>
-                        <div class="mini-stat-label">Saved</div>
+<x-app-layout>
+    <div class="space-y-32">
+        
+        <!-- Patient Profile Header -->
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-24">
+            <div class="flex items-center space-x-24">
+                <div class="relative">
+                    <div class="w-24 h-24 rounded-full bg-primary/10 border-4 border-white shadow-xl flex items-center justify-center text-primary text-h1 font-black uppercase">
+                        {{ substr($user->name, 0, 1) }}
                     </div>
                 </div>
+                <div>
+                    <h1 class="text-h1 text-secondary tracking-tight">Good day, <span class="text-primary font-black italic">{{ $user->name }}</span></h1>
+                    <p class="text-body text-muted flex items-center mt-4">
+                        <svg class="w-4 h-4 mr-8 text-medical-green" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+                        MediConnect Verified Patient • Member since {{ $user->created_at->format('M Y') }}
+                    </p>
+                </div>
+            </div>
+            <div class="flex items-center space-x-12">
+                <x-button variant="outline" class="hidden md:flex">Health Records</x-button>
+                <x-button variant="primary" class="shadow-lg shadow-primary/20">Book Appointment</x-button>
             </div>
         </div>
 
-        <div class="fb-card">
-            <div class="fb-card-header">
-                <span class="fb-card-title">Quick Links</span>
-            </div>
-            <div class="fb-card-body" style="padding: 8px;">
-                <a href="{{ route('patient.consultations.index') }}" class="feed-item" style="text-decoration: none; color: inherit;">
-                    <div class="feed-icon"><svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg></div>
-                    <div class="feed-content">
-                        <div class="feed-title">My Bookings</div>
+        <!-- Stats Grid -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-24">
+            <!-- Total Bookings -->
+            <x-card class="bg-white border-none shadow-sm relative overflow-hidden group">
+                <div class="absolute top-0 right-0 w-16 h-16 bg-primary/5 rounded-bl-full group-hover:scale-[4] transition-transform duration-500"></div>
+                <div class="p-24 relative z-10">
+                    <div class="w-12 h-12 bg-primary/10 text-primary rounded-card flex items-center justify-center mb-16">
+                        <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
                     </div>
-                </a>
-                <a href="{{ route('patient.bookmarks.index') }}" class="feed-item" style="text-decoration: none; color: inherit;">
-                    <div class="feed-icon" style="background: #fff0f0; color: #ff5a5f;"><svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path></svg></div>
-                    <div class="feed-content">
-                        <div class="feed-title">Bookmarks</div>
-                    </div>
-                </a>
-            </div>
-        </div>
-    </div>
-
-    {{-- Center Column: Main Feed --}}
-    <div class="center-col">
-        {{-- Booking Search Prompt --}}
-        <div class="fb-card">
-            <div class="fb-card-body">
-                <div style="display: flex; gap: 12px; align-items: center;">
-                    <div class="profile-avatar" style="width: 40px; height: 40px; font-size: 16px; margin: 0;">{{ substr($user->name, 0, 1) }}</div>
-                    <div style="flex: 1; background: #f0f2f5; border-radius: 20px; padding: 10px 16px; color: #65676b; cursor: pointer;">
-                        Find a doctor or hospital...
-                    </div>
+                    <h3 class="text-small font-bold text-muted uppercase tracking-widest mb-4">Total Bookings</h3>
+                    <p class="text-h1 text-secondary font-black tracking-tighter">{{ $stats['my_consultations'] }}</p>
                 </div>
-                <div style="display: flex; justify-content: space-around; margin-top: 12px; border-top: 1px solid #f0f2f5; padding-top: 12px;">
-                    <div style="display: flex; align-items: center; gap: 8px; color: #65676b; font-weight: 600; font-size: 14px;">
-                        <span style="color: #f3425f;">🏥</span> Hospital
+            </x-card>
+
+            <!-- Bookmarks -->
+            <x-card class="bg-white border-none shadow-sm relative overflow-hidden group">
+                <div class="absolute top-0 right-0 w-16 h-16 bg-medical-red/5 rounded-bl-full group-hover:scale-[4] transition-transform duration-500"></div>
+                <div class="p-24 relative z-10">
+                    <div class="w-12 h-12 bg-medical-red/10 text-medical-red rounded-card flex items-center justify-center mb-16">
+                        <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" /></svg>
                     </div>
-                    <div style="display: flex; align-items: center; gap: 8px; color: #65676b; font-weight: 600; font-size: 14px;">
-                        <span style="color: #45bd62;">👨‍⚕️</span> Doctor
-                    </div>
-                    <div style="display: flex; align-items: center; gap: 8px; color: #65676b; font-weight: 600; font-size: 14px;">
-                        <span style="color: #f7b928;">💊</span> Pharmacy
-                    </div>
+                    <h3 class="text-small font-bold text-muted uppercase tracking-widest mb-4">Saved Doctors</h3>
+                    <p class="text-h1 text-secondary font-black tracking-tighter">{{ $stats['bookmarks'] }}</p>
                 </div>
-            </div>
+            </x-card>
+
+            <!-- Pending -->
+            <x-card class="bg-white border-none shadow-sm relative overflow-hidden group">
+                <div class="absolute top-0 right-0 w-16 h-16 bg-yellow-400/5 rounded-bl-full group-hover:scale-[4] transition-transform duration-500"></div>
+                <div class="p-24 relative z-10">
+                    <div class="w-12 h-12 bg-yellow-400/10 text-yellow-600 rounded-card flex items-center justify-center mb-16">
+                        <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                    </div>
+                    <h3 class="text-small font-bold text-muted uppercase tracking-widest mb-4">Awaiting</h3>
+                    <p class="text-h1 text-secondary font-black tracking-tighter">{{ $stats['recent_consults']->where('status', 'pending')->count() }}</p>
+                </div>
+            </x-card>
+
+            <!-- Rewards (Placeholder Concept) -->
+            <x-card class="bg-white border-none shadow-sm relative overflow-hidden group">
+                <div class="absolute top-0 right-0 w-16 h-16 bg-medical-green/5 rounded-bl-full group-hover:scale-[4] transition-transform duration-500"></div>
+                <div class="p-24 relative z-10">
+                    <div class="w-12 h-12 bg-medical-green/10 text-medical-green rounded-card flex items-center justify-center mb-16">
+                        <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" /></svg>
+                    </div>
+                    <h3 class="text-small font-bold text-muted uppercase tracking-widest mb-4">Health Score</h3>
+                    <p class="text-h1 text-secondary font-black tracking-tighter">92%</p>
+                </div>
+            </x-card>
         </div>
 
-        {{-- Consultation Feed --}}
-        <div class="fb-card">
-            <div class="fb-card-header">
-                <span class="fb-card-title">Recent Activity</span>
-            </div>
-            <div class="fb-card-body">
-                @forelse($stats['recent_consults'] as $c)
-                <div class="feed-item" style="border-bottom: 1px solid #f0f2f5; padding: 16px 0;">
-                    <div class="profile-avatar" style="width: 48px; height: 48px; font-size: 18px; margin: 0; background: #e7f3ff; color: var(--fb-blue);">
-                        {{ strtoupper(substr($c->doctor->name ?? 'D', 0, 1)) }}
+        <!-- Main Dashboard View -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-32">
+            
+            <!-- Consultation History (2/3 width on LG) -->
+            <div class="lg:col-span-2 space-y-32">
+                <x-card class="p-0 border-none shadow-sm overflow-hidden h-full">
+                    <div class="p-24 border-b border-slate-50">
+                        <h3 class="text-h2 text-secondary font-bold">🩺 Recent Activity</h3>
                     </div>
-                    <div class="feed-content">
-                        <div style="display: flex; justify-content: space-between;">
-                            <div class="feed-title">Consultation with {{ $c->doctor->name ?? 'Doctor' }}</div>
-                            <div class="status-badge" style="background: {{ $c->status === 'approved' ? '#e7f3ff' : '#fff9e6' }}; color: {{ $c->status === 'approved' ? '#1877f2' : '#f7b928' }};">
-                                <div class="status-pulse" style="background: currentColor;"></div>
-                                {{ ucfirst($c->status) }}
+                    
+                    <div class="divide-y divide-slate-50">
+                        @forelse($stats['recent_consults'] as $c)
+                        <div class="p-24 hover:bg-slate-50/50 transition-colors flex flex-col sm:flex-row sm:items-center justify-between gap-16">
+                            <div class="flex items-center space-x-16">
+                                <div class="w-14 h-14 rounded-full bg-primary/5 text-primary flex items-center justify-center font-black text-h2 uppercase">
+                                    {{ substr($c->doctor->name ?? 'D', 0, 1) }}
+                                </div>
+                                <div>
+                                    <h4 class="text-body font-black text-secondary">Consultation with {{ $c->doctor->name ?? 'Doctor' }}</h4>
+                                    <p class="text-small text-muted font-medium mb-4">{{ $c->doctor->specialization ?? 'General Specialist' }}</p>
+                                    <div class="flex items-center text-[11px] text-muted font-bold">
+                                        <svg class="w-3 h-3 mr-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                                        {{ \Carbon\Carbon::parse($c->consult_date)->format('M d, Y • h:i A') }}
+                                    </div>
+                                </div>
+                            </div>
+                            <div>
+                                <span class="px-12 py-4 rounded-full text-[9px] font-black uppercase tracking-widest
+                                    {{ $c->status === 'approved' ? 'bg-medical-green/10 text-medical-green' : 
+                                       ($c->status === 'pending' ? 'bg-yellow-400/10 text-yellow-600' : 'bg-slate-100 text-muted') }}">
+                                    {{ $c->status }}
+                                </span>
                             </div>
                         </div>
-                        <div class="feed-meta">{{ $c->doctor->specialization ?? 'Specialist' }}</div>
-                        <div class="feed-meta" style="margin-top: 8px; display: flex; align-items: center; gap: 4px;">
-                            <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                            {{ \Carbon\Carbon::parse($c->consult_date)->format('M d, Y at h:i A') }}
+                        @empty
+                        <div class="p-64 text-center">
+                            <div class="text-48 mb-16 opacity-20">🏥</div>
+                            <h4 class="text-h2 text-secondary font-bold">No Recent Activity</h4>
+                            <p class="text-body text-muted mt-8">Your medical journey starts here. Book your first appointment.</p>
+                            <x-button variant="primary" class="mt-24">Find Doctors</x-button>
+                        </div>
+                        @endforelse
+                    </div>
+                </x-card>
+            </div>
+
+            <!-- Sidebar Widgets (1/3 width on LG) -->
+            <div class="space-y-32">
+                <!-- Upcoming Widget -->
+                <x-card class="border-none shadow-sm overflow-hidden">
+                    <h3 class="text-small font-black text-muted uppercase tracking-widest mb-16">Next Appointment</h3>
+                    @php $next = $stats['recent_consults']->where('status', 'approved')->first(); @endphp
+                    @if($next)
+                    <div class="bg-primary/5 rounded-card p-16 border-l-4 border-primary">
+                        <p class="text-body font-black text-secondary">{{ $next->doctor->name }}</p>
+                        <p class="text-[11px] text-primary font-bold uppercase mt-4">
+                            {{ \Carbon\Carbon::parse($next->consult_date)->diffForHumans() }}
+                        </p>
+                        <x-button variant="ghost" class="p-0 mt-8 text-primary font-black text-[11px] hover:bg-transparent">VIEW DETAILS →</x-button>
+                    </div>
+                    @else
+                    <div class="text-center py-16">
+                        <p class="text-small text-muted font-medium italic">No upcoming sessions</p>
+                    </div>
+                    @endif
+                </x-card>
+
+                <!-- suggested doctors -->
+                <x-card class="p-0 border-none shadow-sm overflow-hidden">
+                    <div class="p-24 border-b border-slate-50">
+                        <h3 class="text-small font-black text-muted uppercase tracking-widest">Recommended for You</h3>
+                    </div>
+                    <div class="divide-y divide-slate-50">
+                        {{-- Mock suggestions for aesthetic --}}
+                        <div class="p-16 flex items-center space-x-12 hover:bg-slate-50 transition-colors cursor-pointer">
+                            <img src="https://i.pravatar.cc/100?u=1" class="w-10 h-10 rounded-full object-cover">
+                            <div>
+                                <p class="text-small font-black text-secondary">Dr. Sarah Johnson</p>
+                                <p class="text-[10px] text-medical-teal font-bold uppercase">Cardiologist</p>
+                            </div>
+                        </div>
+                        <div class="p-16 flex items-center space-x-12 hover:bg-slate-50 transition-colors cursor-pointer">
+                            <img src="https://i.pravatar.cc/100?u=2" class="w-10 h-10 rounded-full object-cover">
+                            <div>
+                                <p class="text-small font-black text-secondary">Dr. Michael Chen</p>
+                                <p class="text-[10px] text-medical-teal font-bold uppercase">Pediatrician</p>
+                            </div>
                         </div>
                     </div>
-                </div>
-                @empty
-                <div style="text-align: center; padding: 40px 20px;">
-                    <div style="font-size: 48px; margin-bottom: 12px;">🏥</div>
-                    <div style="font-weight: 600; color: #65676b;">No recent activity</div>
-                    <p style="color: #65676b; font-size: 14px;">Your medical consultations will appear here.</p>
-                </div>
-                @endforelse
+                    <div class="p-16 bg-slate-50/50">
+                        <x-button variant="outline" class="w-full text-[10px] font-black uppercase">Browse All Doctors</x-button>
+                    </div>
+                </x-card>
             </div>
-        </div>
-    </div>
 
-    {{-- Right Column: Widgets --}}
-    <div class="right-col">
-        <div class="fb-card">
-            <div class="fb-card-header">
-                <span class="fb-card-title">Upcoming Appointments</span>
-            </div>
-            <div class="fb-card-body">
-                @php $pending = $stats['recent_consults']->where('status', 'pending')->first(); @endphp
-                @if($pending)
-                <div style="background: #fff9e6; border-radius: 8px; padding: 12px; border-left: 4px solid #f7b928;">
-                    <div style="font-weight: 600; font-size: 14px; color: #856404;">Pending Confirmation</div>
-                    <div style="font-size: 13px; margin-top: 4px;">{{ $pending->doctor->name }}</div>
-                    <div style="font-size: 12px; color: #856404; margin-top: 2px;">{{ \Carbon\Carbon::parse($pending->consult_date)->diffForHumans() }}</div>
-                </div>
-                @else
-                <p style="color: #65676b; font-size: 14px; text-align: center; margin: 0;">No upcoming appointments</p>
-                @endif
-            </div>
         </div>
 
-        <div class="fb-card">
-            <div class="fb-card-header">
-                <span class="fb-card-title">Suggested Doctors</span>
-            </div>
-            <div class="fb-card-body" style="padding: 8px;">
-                {{-- Example static suggestions --}}
-                <div class="feed-item">
-                    <div class="profile-avatar" style="width: 36px; height: 36px; font-size: 14px; margin: 0;">A</div>
-                    <div class="feed-content">
-                        <div class="feed-title" style="font-size: 14px;">Dr. Ahmed Khan</div>
-                        <div class="feed-meta">Cardiologist</div>
-                    </div>
-                </div>
-                <div class="feed-item">
-                    <div class="profile-avatar" style="width: 36px; height: 36px; font-size: 14px; margin: 0; background: #42b72a;">S</div>
-                    <div class="feed-content">
-                        <div class="feed-title" style="font-size: 14px;">Dr. Sarah Islam</div>
-                        <div class="feed-meta">Pediatrician</div>
-                    </div>
-                </div>
-            </div>
-        </div>
     </div>
-</div>
-@endsection
+</x-app-layout>

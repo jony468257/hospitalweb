@@ -13,6 +13,26 @@ Route::get('/hospital/{hospital:slug}', function (\App\Models\Hospital $hospital
     return view('hospital', compact('hospital'));
 })->name('public.hospital.show');
 
+Route::get('/hospitals', function () {
+    $hospitals = \App\Models\Hospital::with(['thana', 'features'])->paginate(12);
+    return view('hospitals.index', compact('hospitals'));
+})->name('public.hospital.index');
+
+Route::get('/doctors', function () {
+    $doctors = \App\Models\Doctor::with(['hospitals'])->paginate(12);
+    return view('doctors.index', compact('doctors'));
+})->name('public.doctor.index');
+
+Route::get('/doctor/{doctor}', function (\App\Models\Doctor $doctor) {
+    $doctor->load(['hospitals', 'schedules']);
+    return view('doctors.show', compact('doctor'));
+})->name('public.doctor.show');
+
+Route::get('/medicines', function () {
+    $medicines = \App\Models\Medicine::paginate(12);
+    return view('medicines.index', compact('medicines'));
+})->name('public.medicine.index');
+
 // Alias to catch the Tyro-Login forced redirect and send it to standard login
 Route::get('/tyro-login', fn () => redirect()->route('login'))->name('tyro-login.login');
 
