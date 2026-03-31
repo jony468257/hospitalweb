@@ -4,7 +4,11 @@ use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
-    return view('welcome');
+    $hospitals = \App\Models\Hospital::with(['thana', 'services', 'features', 'reviews'])->take(3)->get();
+    $doctors = \App\Models\Doctor::with(['hospitals', 'reviews'])->withCount('reviews')->orderBy('reviews_count', 'desc')->take(4)->get();
+    $medicines = \App\Models\Medicine::take(6)->get();
+
+    return view('welcome', compact('hospitals', 'doctors', 'medicines'));
 });
 
 Route::get('/hospital/{hospital:slug}', function (\App\Models\Hospital $hospital) {

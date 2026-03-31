@@ -15,18 +15,27 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
+        // System Users
         User::factory()->create([
             'name' => 'Admin User',
             'email' => 'admin@medicalweb.test',
-            'password' => bcrypt('password'), // or Hash::make('password')
+            'password' => bcrypt('password'),
             'role' => 'admin',
         ]);
 
         User::factory()->create([
-            'name' => 'Test User',
+            'name' => 'Test Patient',
             'email' => 'user@medicalweb.test',
             'password' => bcrypt('password'),
-            'role' => 'user',
+            'role' => 'patient',
+        ]);
+
+        // Medical Data
+        $this->call([
+            LocationSeeder::class,
+            HospitalSeeder::class,
+            DoctorSeeder::class,
+            MedicineSeeder::class,
         ]);
     }
 }

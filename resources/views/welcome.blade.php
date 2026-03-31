@@ -88,27 +88,31 @@
                     </a>
                 </div>
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                    @for($i=1; $i<=3; $i++)
+                    @foreach($hospitals as $hospital)
                     <x-card class="p-0 border-none group">
-                        <div class="relative h-64 overflow-hidden">
-                            <img src="https://images.unsplash.com/photo-1587350859728-117622bc736d?auto=format&fit=crop&q=80&w=800" alt="Hospital" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+                        <div class="relative h-64 overflow-hidden rounded-t-card bg-slate-100 flex items-center justify-center">
+                            <svg class="w-16 h-16 text-slate-200" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+                            </svg>
                             <div class="absolute top-4 right-4 px-3 py-1 bg-white/90 backdrop-blur rounded-full text-small font-bold flex items-center shadow-sm">
-                                <svg class="w-4 h-4 text-yellow-500 mr-1 fill-yellow-500" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg> 4.9
+                                <svg class="w-4 h-4 text-yellow-500 mr-1 fill-yellow-500" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg> 
+                                {{ number_format($hospital->reviews->avg('rating') ?? 4.8, 1) }}
                             </div>
                         </div>
                         <div class="p-6">
-                            <h3 class="text-h2 text-secondary mb-2">Green Life Medical College</h3>
+                            <h3 class="text-h2 text-secondary mb-2 group-hover:text-primary transition-colors font-bold">{{ $hospital->name }}</h3>
                             <p class="text-small text-muted mb-4 flex items-center">
-                                <svg class="w-4 h-4 mr-1 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg> Dhanmondi, Dhaka
+                                <svg class="w-4 h-4 mr-1 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg> {{ $hospital->address }}, {{ $hospital->thana->name }}
                             </p>
                             <div class="flex flex-wrap gap-2 mb-6">
-                                <span class="px-2 py-1 bg-primary/5 text-primary text-[10px] uppercase font-extrabold rounded-full tracking-wider">ICU - 24/7</span>
-                                <span class="px-2 py-1 bg-medical-teal/5 text-medical-teal text-[10px] uppercase font-extrabold rounded-full tracking-wider">Diagnostics</span>
+                                @foreach($hospital->services->take(2) as $service)
+                                <span class="px-2 py-1 bg-primary/5 text-primary text-[10px] uppercase font-extrabold rounded-full tracking-wider">{{ $service->name }}</span>
+                                @endforeach
                             </div>
-                            <x-button variant="outline" class="w-full py-3">View Details</x-button>
+                            <x-button variant="outline" class="w-full py-3" href="{{ route('public.hospital.show', $hospital->slug) }}">View Details</x-button>
                         </div>
                     </x-card>
-                    @endfor
+                    @endforeach
                 </div>
             </section>
 
@@ -124,18 +128,22 @@
                     </a>
                 </div>
                 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-                    @for($i=1; $i<=4; $i++)
+                    @foreach($doctors as $doctor)
                     <x-card class="text-center group p-8">
                         <div class="relative w-32 h-32 mx-auto mb-5">
-                            <img src="https://i.pravatar.cc/300?img={{ $i+10 }}" alt="Doctor" class="w-full h-full rounded-full object-cover border-4 border-slate-50 group-hover:border-medical-teal/30 transition-colors">
+                            <div class="w-full h-full bg-slate-100 rounded-full flex items-center justify-center text-medical-teal text-3xl font-black uppercase border-4 border-slate-50 group-hover:border-medical-teal/30 transition-colors">
+                                {{ substr($doctor->name, 0, 1) }}
+                            </div>
                             <div class="absolute bottom-0 right-0 w-8 h-8 bg-medical-green rounded-full border-2 border-white shadow-sm"></div>
                         </div>
-                        <h3 class="text-h2 text-secondary mb-1">Dr. Sarah Johnson</h3>
-                        <p class="text-small font-bold text-medical-teal uppercase tracking-widest mb-4">Senior Cardiologist</p>
-                        <p class="text-small text-muted mb-5 italic">MBBS, FCPS (Cardiology), <br>15+ Years Experience</p>
-                        <x-button variant="outline" size="sm" class="w-full">Book Now</x-button>
+                        <h3 class="text-h2 text-secondary mb-1 font-bold">{{ $doctor->name }}</h3>
+                        <p class="text-small font-bold text-medical-teal uppercase tracking-widest mb-4">{{ $doctor->specialization }}</p>
+                        <p class="text-small text-muted mb-5 italic line-clamp-2">
+                             {{ $doctor->degree }}, <br>{{ $doctor->experience_year }}+ Years Experience
+                        </p>
+                        <x-button variant="outline" size="sm" class="w-full" href="{{ route('public.doctor.show', $doctor->id) }}">Book Now</x-button>
                     </x-card>
-                    @endfor
+                    @endforeach
                 </div>
             </section>
 
@@ -151,29 +159,31 @@
                     </a>
                 </div>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    @for($i=1; $i<=2; $i++)
+                    @foreach($medicines as $medicine)
                     <x-card padding="p-0" class="flex flex-col md:flex-row items-stretch border-none overflow-hidden group">
-                        <div class="md:w-2/5 relative">
-                            <img src="https://images.unsplash.com/photo-1586015555751-63bb77f4322a?auto=format&fit=crop&q=80&w=800" alt="Pharmacy" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
+                        <div class="md:w-1/3 bg-slate-50 flex items-center justify-center p-6">
+                            <svg class="w-16 h-16 text-medical-red/30" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z" />
+                            </svg>
                         </div>
                         <div class="p-8 flex-1">
                             <div class="flex items-start justify-between mb-4">
                                 <div>
-                                    <h3 class="text-h2 text-secondary mb-1">Lazz Pharma</h3>
-                                    <p class="text-small text-muted uppercase tracking-widest font-bold">Open 24/7</p>
+                                    <h3 class="text-h2 text-secondary mb-1 font-bold">{{ $medicine->brand_name }}</h3>
+                                    <p class="text-small text-muted uppercase tracking-widest font-bold">{{ $medicine->dosage_form }} ({{ $medicine->strength }})</p>
                                 </div>
-                                <div class="bg-medical-red/5 text-medical-red px-3 py-1 rounded-full text-[10px] font-extrabold uppercase">Top Vendor</div>
+                                <div class="bg-medical-red/5 text-medical-red px-3 py-1 rounded-full text-[10px] font-extrabold uppercase">৳{{ $medicine->price }}</div>
                             </div>
-                            <p class="text-body text-muted mb-6 line-clamp-2">Providing 100% authentic medicine with home delivery service across the city.</p>
+                            <p class="text-small text-muted mb-6">{{ $medicine->generic_name }} by {{ $medicine->company }}</p>
                             <div class="flex items-center justify-between mt-auto pt-4 border-t border-slate-50">
                                 <span class="text-small font-bold text-secondary flex items-center">
-                                    <svg class="w-4 h-4 mr-1 text-medical-green" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg> Prescriptions Verified
+                                    <svg class="w-4 h-4 mr-1 text-medical-green" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg> In Stock
                                 </span>
-                                <x-button variant="ghost" class="font-bold underline text-medical-red">Shop Now</x-button>
+                                <x-button variant="ghost" class="font-bold underline text-medical-red">Buy Now</x-button>
                             </div>
                         </div>
                     </x-card>
-                    @endfor
+                    @endforeach
                 </div>
             </section>
         </div>
