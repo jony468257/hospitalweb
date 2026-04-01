@@ -1,79 +1,120 @@
-<x-guest-layout>
-    <div class="min-h-[80vh] flex items-center justify-center p-16 sm:p-32">
-        <div class="max-w-6xl w-full grid grid-cols-1 lg:grid-cols-2 gap-0 overflow-hidden rounded-[24px] shadow-2xl border border-slate-100 bg-white">
-            
-            <!-- Branding/Image Side -->
-            <div class="hidden lg:flex relative flex-col justify-end p-48 bg-slate-900 border-r border-white/5">
-                <div class="absolute inset-0 opacity-40">
-                    <img src="https://images.unsplash.com/photo-1576091160550-217359f42f8c?auto=format&fit=crop&q=80&w=1200" alt="Medical Lab" class="w-full h-full object-cover">
-                </div>
-                <div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-900/40 to-transparent"></div>
-                
-                <div class="relative z-10">
-                    <h2 class="text-[40px] font-black text-white leading-tight mb-16 italic font-serif">Providing <span class="text-sky-400">Trust</span> & <span class="text-medical-teal font-extrabold">Professional</span> Care.</h2>
-                    <p class="text-h2 text-white/70 font-medium mb-32 max-w-sm">Join the 25k+ citizens managing their health better with MediConnect.</p>
-                    
-                    <div class="flex items-center space-x-12 pt-32 border-t border-white/10">
-                        <div class="flex -space-x-12">
-                            <img src="https://i.pravatar.cc/100?u=1" class="w-12 h-12 rounded-full border-2 border-slate-900 shadow-sm">
-                            <img src="https://i.pravatar.cc/100?u=2" class="w-12 h-12 rounded-full border-2 border-slate-900 shadow-sm">
-                            <img src="https://i.pravatar.cc/100?u=3" class="w-12 h-12 rounded-full border-2 border-slate-900 shadow-sm">
-                        </div>
-                        <span class="text-small font-bold text-white/50 uppercase tracking-widest">Trusted Healthcare Network</span>
+<x-auth-layout>
+    <div class="w-full max-w-4xl mx-auto grid grid-cols-1 lg:grid-cols-2 rounded-2xl overflow-hidden shadow-[0_0_80px_rgba(0,0,0,0.6)] border border-white/5">
+
+        {{-- LEFT: Welcome Panel --}}
+        <div class="hidden lg:flex flex-col justify-between bg-[#0d1117] p-12 border-r border-white/5">
+            <div>
+                <a href="/" class="inline-flex items-center gap-2 mb-10">
+                    <div class="w-8 h-8 rounded-lg bg-green-500 flex items-center justify-center">
+                        <svg class="w-4 h-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
                     </div>
-                </div>
+                    <span class="text-lg font-black text-white tracking-tight">Medi<span class="text-green-400">Connect</span></span>
+                </a>
+
+                <h2 class="text-3xl font-extrabold text-white leading-snug mb-4">Welcome back</h2>
+                <p class="text-sm text-gray-400 leading-relaxed mb-8">
+                    MediConnect is a comprehensive digital solution designed to enhance healthcare delivery efficiency in Bangladesh. It empowers patients, doctors, and hospitals to connect through real-time data and smart management tools.
+                </p>
+
+                <ul class="space-y-3">
+                    @foreach(['Hospital & Doctor Discovery', 'Appointment Booking', 'Digital Medical Records', 'Medicine & Pharmacy Access', 'Real-time Health Monitoring', 'Secure Encrypted Platform'] as $feature)
+                    <li class="flex items-center gap-3">
+                        <svg class="w-4 h-4 text-green-400 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7" />
+                        </svg>
+                        <span class="text-sm text-gray-300">{{ $feature }}</span>
+                    </li>
+                    @endforeach
+                </ul>
             </div>
 
-            <!-- Form Side -->
-            <div class="p-32 sm:p-64 flex flex-col justify-center">
-                <div class="mb-40">
-                    <h1 class="text-h1 text-secondary mb-8">Welcome <span class="text-primary font-black italic tracking-tighter">Back</span></h1>
-                    <p class="text-body text-muted">Log in to access your consultations and health records.</p>
-                </div>
-
-                <!-- Session Status -->
-                <x-auth-session-status class="mb-24" :status="session('status')" />
-
-                <form method="POST" action="{{ route('login') }}" class="space-y-24">
-                    @csrf
-
-                    <!-- Email Address -->
-                    <div class="space-y-8">
-                        <label for="email" class="text-small font-extrabold text-secondary uppercase tracking-widest">Email Address</label>
-                        <x-input id="email" type="email" name="email" :value="old('email')" placeholder="doctor@mediconnect.com" required autofocus autocomplete="username" />
-                        <x-input-error :messages="$errors->get('email')" class="mt-2" />
-                    </div>
-
-                    <!-- Password -->
-                    <div class="space-y-8">
-                        <div class="flex justify-between">
-                            <label for="password" class="text-small font-extrabold text-secondary uppercase tracking-widest">Password</label>
-                            @if (Route::has('password.request'))
-                                <a class="text-small font-bold text-primary hover:text-primary/80 transition-colors" href="{{ route('password.request') }}">
-                                    Forgot?
-                                </a>
-                            @endif
-                        </div>
-                        <x-input id="password" type="password" name="password" placeholder="••••••••" required autocomplete="current-password" />
-                        <x-input-error :messages="$errors->get('password')" class="mt-2" />
-                    </div>
-
-                    <!-- Remember Me -->
-                    <label for="remember_me" class="flex items-center group cursor-pointer">
-                        <input id="remember_me" type="checkbox" class="w-4 h-4 rounded border-slate-300 text-primary shadow-sm focus:ring-primary/20 focus:ring-offset-w-0" name="remember">
-                        <span class="ms-12 text-small font-bold text-muted group-hover:text-secondary transition-colors">{{ __('Stay logged in') }}</span>
-                    </label>
-
-                    <div class="pt-16">
-                        <x-button variant="primary" class="w-full font-black py-16 text-h2 shadow-xl shadow-primary/20">Sign In Securely</x-button>
-                    </div>
-
-                    <p class="text-center text-small font-bold text-muted mt-32">
-                        Don't have an account? 
-                        <a href="{{ route('register') }}" class="text-primary hover:underline decoration-2 underline-offset-4">Create one for free</a>
-                    </p>
-                </form>
+            <div class="pt-8 border-t border-white/5">
+                <p class="text-xs text-gray-600">Trusted by 500+ medical institutions across Bangladesh.</p>
             </div>
         </div>
+
+        {{-- RIGHT: Login Form --}}
+        <div class="bg-[#161b22] p-10 sm:p-12 flex flex-col justify-center">
+
+            {{-- Mobile Logo --}}
+            <div class="lg:hidden mb-8 flex items-center gap-2">
+                <div class="w-7 h-7 rounded-lg bg-green-500 flex items-center justify-center">
+                    <svg class="w-3.5 h-3.5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                </div>
+                <a href="/" class="text-lg font-black text-white">Medi<span class="text-green-400">Connect</span></a>
+            </div>
+
+            <h1 class="text-2xl font-black text-white mb-1">Sign In</h1>
+            <p class="text-xs text-gray-500 mb-8">Enter your credentials to access your portal</p>
+
+            <x-auth-session-status class="mb-4 text-xs text-green-400" :status="session('status')" />
+
+            <form method="POST" action="{{ route('login') }}" class="space-y-5">
+                @csrf
+
+                {{-- Email --}}
+                <div>
+                    <label for="email" class="block text-xs font-semibold text-gray-400 mb-1.5">Email Address</label>
+                    <div class="relative">
+                        <input id="email" type="email" name="email" value="{{ old('email') }}"
+                            placeholder="Enter your email" required autofocus autocomplete="username"
+                            class="w-full bg-[#0d1117] border border-green-500/50 hover:border-green-500 focus:border-green-400 text-white placeholder-gray-600 rounded-lg pl-10 pr-4 py-3 text-sm outline-none transition-colors">
+                    </div>
+                    <x-input-error :messages="$errors->get('email')" class="mt-1 text-xs text-red-400" />
+                </div>
+
+                {{-- Password --}}
+                <div>
+                    <div class="flex justify-between items-center mb-1.5">
+                        <label for="password" class="text-xs font-semibold text-gray-400">Password</label>
+                        @if (Route::has('password.request'))
+                        <a href="{{ route('password.request') }}" class="text-xs text-green-400 hover:text-green-300 transition-colors">Forgot password?</a>
+                        @endif
+                    </div>
+                    <div class="relative">
+                    
+                        <input id="password" type="password" name="password"
+                            placeholder="Enter your password" required autocomplete="current-password"
+                            class="w-full bg-[#0d1117] border border-green-500/50 hover:border-green-500 focus:border-green-400 text-white placeholder-gray-600 rounded-lg pl-10 pr-4 py-3 text-sm outline-none transition-colors">
+                    </div>
+                    <x-input-error :messages="$errors->get('password')" class="mt-1 text-xs text-red-400" />
+                </div>
+
+                {{-- Remember Me --}}
+                <label class="flex items-center gap-2.5 cursor-pointer select-none">
+                    <input type="checkbox" name="remember" id="remember_me"
+                        class="w-4 h-4 rounded border-green-500/50 bg-[#0d1117] text-green-500 focus:ring-green-500/20 focus:ring-offset-0 cursor-pointer">
+                    <span class="text-xs text-gray-400">Keep me signed in</span>
+                </label>
+
+                {{-- Submit --}}
+                <button type="submit"
+                    class="group w-full flex items-center justify-center gap-2 bg-rose-500 hover:bg-rose-600 active:bg-rose-700 text-white font-bold py-3 rounded-lg text-sm transition-all duration-150 hover:shadow-[0_4px_20px_rgba(244,63,94,0.4)] mt-2">
+                    Sign in
+                    <svg class="w-4 h-4 group-hover:translate-x-0.5 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                    </svg>
+                </button>
+
+                {{-- Download App (optional nice touch like reference) --}}
+                <a href="#" class="flex items-center justify-center gap-2 w-full border border-white/10 hover:border-white/20 text-gray-400 hover:text-white py-2.5 rounded-lg text-xs font-medium transition-all">
+                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M17.523 15.341l-4.053-4.053 4.053-4.053-1.414-1.414-4.053 4.053-4.053-4.053-1.414 1.414 4.053 4.053-4.053 4.053 1.414 1.414 4.053-4.053 4.053 4.053z" />
+                        <path d="M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2zm0 18c-4.418 0-8-3.582-8-8s3.582-8 8-8 8 3.582 8 8-3.582 8-8 8z" />
+                    </svg>
+                    No account yet? <span class="text-green-400 font-semibold">Create one →</span>
+                </a>
+
+                <p class="text-center text-xs text-gray-600 pt-1">
+                    Don't have an account?
+                    <a href="{{ route('register') }}" class="text-green-400 hover:text-green-300 font-semibold ml-1 transition-colors">Register here</a>
+                </p>
+            </form>
+        </div>
+
     </div>
-</x-guest-layout>
+</x-auth-layout>

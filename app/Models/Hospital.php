@@ -8,7 +8,11 @@ class Hospital extends Model
 {
     protected $fillable = [
         'user_id', 'name', 'slug', 'type', 'address', 'phone',
-        'thana_id', 'country_id', 'latitude', 'longitude', 'description',
+        'thana_id', 'country_id', 'latitude', 'longitude', 'description', 'custom_design',
+    ];
+
+    protected $casts = [
+        'custom_design' => 'array',
     ];
 
     public function owner()

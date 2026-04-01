@@ -12,6 +12,13 @@ Route::get('/', function () {
 });
 
 Route::get('/hospital/{hospital:slug}', function (\App\Models\Hospital $hospital) {
+    if ($hospital->custom_design) {
+        $design = $hospital->custom_design;
+        // If it's stored as JSON (GrapesJS format), we might need to render it.
+        // For now, let's assume it's just the HTML/CSS from GrapesJS.
+        return view('hospitals.custom', compact('hospital', 'design'));
+    }
+
     $hospital->load(['features', 'services', 'doctors', 'thana']);
 
     return view('hospital', compact('hospital'));
@@ -60,6 +67,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::middleware('role:hospital_owner')->prefix('hospital-owner')->name('hospital-owner.')->group(function () {
         Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
         Route::resource('hospitals', \App\Http\Controllers\HospitalOwner\HospitalController::class);
+        Route::get('hospitals/{hospital}/design', [\App\Http\Controllers\HospitalOwner\HospitalController::class, 'design'])->name('hospitals.design');
+        Route::post('hospitals/{hospital}/design', [\App\Http\Controllers\HospitalOwner\HospitalController::class, 'saveDesign'])->name('hospitals.save-design');
         Route::resource('doctors', \App\Http\Controllers\HospitalOwner\DoctorController::class);
     });
 

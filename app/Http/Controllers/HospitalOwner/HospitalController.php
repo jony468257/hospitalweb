@@ -168,4 +168,28 @@ class HospitalController extends Controller
 
         return redirect()->route('hospital-owner.hospitals.index')->with('success', 'Hospital deleted successfully.');
     }
+
+    public function design(Hospital $hospital)
+    {
+        if ($hospital->user_id !== Auth::id()) {
+            abort(403);
+        }
+
+        $hospital->load(['features', 'services', 'doctors', 'thana']);
+
+        return view('hospital-owner.hospitals.design', compact('hospital'));
+    }
+
+    public function saveDesign(Request $request, Hospital $hospital)
+    {
+        if ($hospital->user_id !== Auth::id()) {
+            abort(403);
+        }
+
+        $hospital->update([
+            'custom_design' => $request->input('design'),
+        ]);
+
+        return response()->json(['success' => true]);
+    }
 }

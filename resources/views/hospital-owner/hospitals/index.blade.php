@@ -46,6 +46,7 @@
                         <td>{{ $hospital->thana->name ?? '—' }}</td>
                         <td>{{ $hospital->phone ?? '—' }}</td>
                         <td style="text-align:right; display: flex; gap: 0.5rem; justify-content: flex-end;">
+                            <a href="{{ route('hospital-owner.hospitals.design', $hospital) }}" class="btn btn-sm btn-primary">Design Page</a>
                             <a href="{{ route('hospital-owner.hospitals.edit', $hospital) }}" class="btn btn-sm btn-outline-primary">Edit</a>
                             <form action="{{ route('hospital-owner.hospitals.destroy', $hospital) }}" method="POST" onsubmit="return confirm('Are you sure?')">
                                 @csrf
